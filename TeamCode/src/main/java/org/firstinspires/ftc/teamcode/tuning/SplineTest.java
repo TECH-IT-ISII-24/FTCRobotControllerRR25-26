@@ -37,9 +37,7 @@ public final class SplineTest extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
 
 
-
         waitForStart();
-
 
         findAprilTag();
 
@@ -58,10 +56,12 @@ public final class SplineTest extends LinearOpMode {
 
         //TODO: Method this shit man wth
         Dictionary<Integer, AprilTagInformation> aprilTagDict = new Hashtable<>();
-        aprilTagDict.put(0,new AprilTagInformation(-36,-72, true));
-        aprilTagDict.put(1,new AprilTagInformation(+36,-72, true));
-        aprilTagDict.put(2,new AprilTagInformation(-36,+72, false));
-        aprilTagDict.put(3,new AprilTagInformation(-36,+72, false));
+        aprilTagDict.put(11,new AprilTagInformation(-48,-72, false));
+        aprilTagDict.put(12,new AprilTagInformation(-72,0, true));
+        aprilTagDict.put(13,new AprilTagInformation(-48,+72, false));
+        aprilTagDict.put(14,new AprilTagInformation(+48,+72, false));
+        aprilTagDict.put(15,new AprilTagInformation(+72,+0, true));
+        aprilTagDict.put(16,new AprilTagInformation(+48,-72, false));
 
         List<AprilTagDetection> currentDetections = aprilTag.getDetections();
         AprilTagDetection TargetTag;
@@ -92,7 +92,7 @@ public final class SplineTest extends LinearOpMode {
             throw new RuntimeException("Error #AP02 AprilTag ID is not valid");
         }
         else{
-            //TODO: sottrazione vettore yada yada
+
         }
 
     }
@@ -103,11 +103,11 @@ public final class SplineTest extends LinearOpMode {
 class AprilTagInformation{
     int xPos;
     int yPos;
-    boolean isLookingRight;
+    boolean invertXY;
 
-    public AprilTagInformation(int x, int y, boolean isRight) {
+    public AprilTagInformation(int x, int y, boolean invert) {
          xPos = x;
          yPos = y;
-         isLookingRight = isRight;
+         invertXY = invert;
     }
 }
