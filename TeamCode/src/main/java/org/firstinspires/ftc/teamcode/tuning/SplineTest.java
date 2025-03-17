@@ -20,6 +20,7 @@ import org.firstinspires.ftc.teamcode.MecanumDrive;
 import org.firstinspires.ftc.teamcode.TankDrive;
 import static java.lang.Math.sqrt;
 
+import java.lang.annotation.Target;
 import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.List;
@@ -87,11 +88,37 @@ public final class SplineTest extends LinearOpMode {
             idTargetTag = TargetTag.id;
         }
 
+        AprilTagInformation targetTagInfo = aprilTagDict.get(idTargetTag);
 
-        if(aprilTagDict.get(idTargetTag) == null){
+        if(targetTagInfo == null){
             throw new RuntimeException("Error #AP02 AprilTag ID is not valid");
         }
         else{
+            double beginPoseX;
+            double beginPoseY;
+            if(TargetTag.ftcPose.yaw > 0){
+                if(targetTagInfo.invertXY){
+                    beginPoseY = targetTagInfo.xPos + xToTargetTag;
+                    beginPoseX = targetTagInfo.yPos + yToTargetTag;
+                }
+                else{
+                    beginPoseX = targetTagInfo.xPos + xToTargetTag;
+                    beginPoseY = targetTagInfo.yPos + yToTargetTag;
+                }
+                //X needs to be added.
+            }
+            else if(TargetTag.ftcPose.yaw < 0){
+                if(targetTagInfo.invertXY){
+                    beginPoseY = targetTagInfo.xPos + xToTargetTag;
+                    beginPoseX = targetTagInfo.yPos + yToTargetTag;
+                }
+                else{
+                    beginPoseX = targetTagInfo.xPos + xToTargetTag;
+                    beginPoseY = targetTagInfo.yPos + yToTargetTag;
+                }
+                //X needs to be subtracted
+            }
+            Pose2d beginPose = new Pose2d(0, 0, 0);
 
         }
 
