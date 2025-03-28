@@ -31,7 +31,7 @@ public final class SplineTest extends LinearOpMode {
 
         findAprilTag();
 
-        if (TuningOpModes.DRIVE_CLASS.equals(MecanumDrive.class)) {
+        if (false) {
             Pose2d beginPose = new Pose2d(0, 0, 0);
             MecanumDrive drive = new MecanumDrive(hardwareMap, beginPose);
             Actions.runBlocking(
@@ -40,6 +40,8 @@ public final class SplineTest extends LinearOpMode {
                         .splineTo(new Vector2d(0, 60), Math.PI)
                         .build());
         }
+
+
     }
 
     public void findAprilTag(){
@@ -99,7 +101,9 @@ public final class SplineTest extends LinearOpMode {
             beginPoseX = (isAddition) ? xToTargetTag + targetTagInfo.xPos : xToTargetTag - targetTagInfo.xPos;
             beginPoseY = (isAddition) ? yToTargetTag + targetTagInfo.yPos : yToTargetTag - targetTagInfo.yPos;
 
-
+            telemetry.addLine("BeginPosX: " + beginPoseX);
+            telemetry.addLine("BeginPosY: " + beginPoseY);
+            telemetry.update();
 
 
             //To calculate the heading you need to add both angles together and subtract by 180.
