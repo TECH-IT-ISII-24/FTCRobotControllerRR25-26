@@ -1,4 +1,6 @@
 package org.firstinspires.ftc.teamcode.tuning;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagPoseFtc;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
@@ -18,6 +20,8 @@ import java.util.List;
 
 public final class SplineTest extends LinearOpMode {
     private AprilTagProcessor aprilTag;
+    private VisionPortal visionPortal;
+    VisionPortal.Builder builder = new VisionPortal.Builder();
 
 
 
@@ -25,9 +29,15 @@ public final class SplineTest extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
+        builder.setCamera(hardwareMap.get(WebcamName .class, "Webcam 1"));
+
+        aprilTag = new AprilTagProcessor.Builder().build();
+        builder.addProcessor(aprilTag);
 
 
         waitForStart();
+        sleep(3000);
+        while(aprilTag.getDetections().isEmpty())
 
         findAprilTag();
 
@@ -108,7 +118,7 @@ public final class SplineTest extends LinearOpMode {
 
             //To calculate the heading you need to add both angles together and subtract by 180.
             //TODO: normalize angle values so that they can be processed as radiant.
-            Pose2d beginPose = new Pose2d(beginPoseX, beginPoseY, 0);
+            //Pose2d beginPose = new Pose2d(beginPoseX, beginPoseY, 0);
 
         }
 
