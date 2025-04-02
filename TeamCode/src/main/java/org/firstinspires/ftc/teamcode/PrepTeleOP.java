@@ -87,10 +87,10 @@ public class PrepTeleOP extends LinearOpMode {
             rightBackPower  /= max;
         }
 
-        HardwareMapping.leftFrontDrive.setPower(leftFrontPower);
-        HardwareMapping.rightFrontDrive.setPower(rightFrontPower);
-        HardwareMapping.leftBackDrive.setPower(leftBackPower);
-        HardwareMapping.rightBackDrive.setPower(rightBackPower);
+        //HardwareMapping.leftFrontDrive.setPower(leftFrontPower);
+        //HardwareMapping.rightFrontDrive.setPower(rightFrontPower);
+        //HardwareMapping.leftBackDrive.setPower(leftBackPower);
+        //HardwareMapping.rightBackDrive.setPower(rightBackPower);
 
         /*
             leftFrontPower  = gamepad1.x ? 1.0 : 0.0;  // X gamepad

@@ -15,20 +15,22 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 public class HardwareMapping {
 
-    static DcMotorEx upperSliderDrive = hardwareMap.get(DcMotorEx.class, "upper_slider_drive");
-    static DcMotorEx lowerSliderDrive = hardwareMap.get(DcMotorEx.class, "lower_slider_drive");
-    static DigitalChannel upperSliderSensor = hardwareMap.get(DigitalChannel.class, "upper_slider_sensor");
-    static DigitalChannel lowerSliderSensor = hardwareMap.get(DigitalChannel.class, "lower_slider_sensor");
-    static Servo upperRotationServo = hardwareMap.get(Servo.class, "upper_rotation_servo");
-    static Servo lowerRotationServo = hardwareMap.get(Servo.class, "lower_rotation_servo");
-    static Servo upperClosingServo = hardwareMap.get(Servo.class, "upper_closing_servo");
-    static Servo lowerClosingServo = hardwareMap.get(Servo.class, "lower_closing_servo");
+    public DcMotorEx upperSliderDrive = hardwareMap.get(DcMotorEx.class, "upper_slider_drive");
+    public DcMotorEx lowerSliderDrive = hardwareMap.get(DcMotorEx.class, "lower_slider_drive");
+    public DigitalChannel upperSliderSensor = hardwareMap.get(DigitalChannel.class, "upper_slider_sensor");
+    public DigitalChannel lowerSliderSensor = hardwareMap.get(DigitalChannel.class, "lower_slider_sensor");
+    public Servo upperRotationServo = hardwareMap.get(Servo.class, "upper_rotation_servo");
+    public Servo lowerRotationServo = hardwareMap.get(Servo.class, "lower_rotation_servo");
+    public Servo upperClosingServo = hardwareMap.get(Servo.class, "upper_closing_servo");
+    public Servo lowerClosingServo = hardwareMap.get(Servo.class, "lower_closing_servo");
 
-    static DcMotorEx leftFrontDrive = hardwareMap.get(DcMotorEx.class, "left_front_drive");
-    static DcMotorEx leftBackDrive = hardwareMap.get(DcMotorEx.class, "left_back_drive");
-    static DcMotorEx rightBackDrive = hardwareMap.get(DcMotorEx.class, "right_back_drive");
-    static DcMotorEx rightFrontDrive = hardwareMap.get(DcMotorEx.class, "right_front_drive");
+    public DcMotorEx leftFrontDrive = hardwareMap.get(DcMotorEx.class, "left_front_drive");
+    public DcMotorEx leftBackDrive = hardwareMap.get(DcMotorEx.class, "left_back_drive");
+    public DcMotorEx rightBackDrive = hardwareMap.get(DcMotorEx.class, "right_back_drive");
+    public DcMotorEx rightFrontDrive = hardwareMap.get(DcMotorEx.class, "right_front_drive");
 
+
+    //TODO: First declare motor vars as null, otherwise you get a null pointer exception
 
 
 }

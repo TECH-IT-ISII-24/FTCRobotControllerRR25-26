@@ -37,7 +37,7 @@ public final class SplineTest extends LinearOpMode {
 
         waitForStart();
         sleep(3000);
-        while(aprilTag.getDetections().isEmpty())
+        while(aprilTag.getDetections().isEmpty()){}
 
         findAprilTag();
 
