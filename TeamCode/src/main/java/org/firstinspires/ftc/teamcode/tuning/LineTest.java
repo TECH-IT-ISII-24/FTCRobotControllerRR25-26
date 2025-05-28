@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.tuning;
 
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.Vector2d;
+import com.acmerobotics.roadrunner.VelConstraint;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -29,16 +30,19 @@ public final class LineTest extends LinearOpMode {
 
         waitForStart();
 
+        //Angle increment is counter-clockwise
+        //tangent defines the direction of movement relative to a point
+        //when going to x,y with tangent 0, the robot will move to approach the tan(0)
+        //Same applies on start of movement
 
-        if (true){
-            Pose2d beginPose = new Pose2d(0, 0, 0);
-            MecanumDrive drive = new MecanumDrive(hardwareMap, beginPose);
-            Actions.runBlocking(
+        Pose2d beginPose = new Pose2d(0, 0,0 );
+        MecanumDrive drive = new MecanumDrive(hardwareMap, beginPose);
+        Actions.runBlocking(
                 drive.actionBuilder(beginPose)
-                        .setTangent(0)
-                        .lineToX(80)
+                        .setTangent(Math.PI/2)
+                        .splineToConstantHeading(new Vector2d(42, 21), Math.PI)
                         .build());
-        }
+
 
 
     }
