@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.tuning;
 
 import com.acmerobotics.roadrunner.Pose2d;
+import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.VelConstraint;
 import com.acmerobotics.roadrunner.ftc.Actions;
@@ -17,6 +18,7 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Vector;
 
 @TeleOp(name="LineToX80", group="Development")
 public final class LineTest extends LinearOpMode {
@@ -34,14 +36,20 @@ public final class LineTest extends LinearOpMode {
         //tangent defines the direction of movement relative to a point
         //when going to x,y with tangent 0, the robot will move to approach the tan(0)
         //Same applies on start of movement
+        //Tan(0) is right side from spectators (PC position)
+        //turn() exists!!!!
+        //CHECK OFFSETS!!! Maybe Y needs to be pos???
 
-        Pose2d beginPose = new Pose2d(0, 0,0 );
+        Pose2d beginPose = new Pose2d(0, 48,-(Math.PI/2) );
         MecanumDrive drive = new MecanumDrive(hardwareMap, beginPose);
         Actions.runBlocking(
                 drive.actionBuilder(beginPose)
-                        .setTangent(Math.PI/2)
-                        .splineToConstantHeading(new Vector2d(42, 21), Math.PI)
+                        .setTangent(0)
+                        .splineToLinearHeading(new Pose2d(48,0,Math.PI), -(Math.PI/2))
+
+
                         .build());
+
 
 
 
