@@ -29,17 +29,17 @@ public final class SplineTest extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        builder.setCamera(hardwareMap.get(WebcamName .class, "Webcam 1"));
-
-        aprilTag = new AprilTagProcessor.Builder().build();
-        builder.addProcessor(aprilTag);
-
-
+//        builder.setCamera(hardwareMap.get(WebcamName .class, "Webcam 1"));
+//
+//        aprilTag = new AprilTagProcessor.Builder().build();
+//        builder.addProcessor(aprilTag);
+//
+//
         waitForStart();
         sleep(3000);
-        while(aprilTag.getDetections().isEmpty()){}
-
-        findAprilTag();
+//        while(aprilTag.getDetections().isEmpty()){}
+//
+//        findAprilTag();
 
         if (false) {
             Pose2d beginPose = new Pose2d(0, 0, 0);
