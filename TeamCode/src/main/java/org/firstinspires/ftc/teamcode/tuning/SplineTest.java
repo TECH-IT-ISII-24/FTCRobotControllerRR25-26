@@ -31,6 +31,7 @@ public final class SplineTest extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         builder.setCamera(hardwareMap.get(WebcamName .class, "Webcam 1"));
 
+        //Initialize apriltag processor with Webcam 1
         aprilTag = new AprilTagProcessor.Builder().build();
         builder.addProcessor(aprilTag);
 
@@ -38,6 +39,7 @@ public final class SplineTest extends LinearOpMode {
         waitForStart();
         sleep(3000);
         AprilTagDetection foundTag;
+        //Wait until you can see a tag, then save it and start position calculation
         while(true){
             if (!aprilTag.getDetections().isEmpty()){
                 foundTag = aprilTag.getDetections().get(0);
@@ -45,11 +47,11 @@ public final class SplineTest extends LinearOpMode {
             }
 
         }
-
+        //Call function to find intial pose to begin pathing
         Pose2d beginPose = findAprilTag(foundTag);
 
         if (true) {
-
+            //Run trajectory
             MecanumDrive drive = new MecanumDrive(hardwareMap, beginPose);
             Actions.runBlocking(
                 drive.actionBuilder(beginPose)
@@ -63,7 +65,7 @@ public final class SplineTest extends LinearOpMode {
 
     public Pose2d findAprilTag(AprilTagDetection TargetTag){
 
-        //TODO: Method this shit man wth
+        //All known apriltags in 24-25
         Dictionary<Integer, AprilTagInformation> aprilTagDict = new Hashtable<>();
         aprilTagDict.put(11,new AprilTagInformation(-48,-72, 0));
         aprilTagDict.put(12,new AprilTagInformation(-72,0, 90));
@@ -72,37 +74,44 @@ public final class SplineTest extends LinearOpMode {
         aprilTagDict.put(15,new AprilTagInformation(+72,+0, 270));
         aprilTagDict.put(16,new AprilTagInformation(+48,-72, 0));
 
+        //Init variables for distance from detected tag
         double xToTargetTag;
         double yToTargetTag;
         double idTargetTag;
         double angToTargetTag;
 
+        //Throw exception if tag metadata is not found is found.
         if(TargetTag.metadata == null) {
 
             throw new RuntimeException("Error #AP01 AprilTag Metadata is Null");
         }
         else{
+
             AprilTagPoseFtc TargetTagPos = TargetTag.ftcPose;
             xToTargetTag = TargetTagPos.x;
             yToTargetTag = TargetTagPos.y;
             angToTargetTag = TargetTagPos.yaw;
             idTargetTag = TargetTag.id;
         }
-
+        //Get global coordinates of the found tag
         AprilTagInformation targetTagInfo = aprilTagDict.get(idTargetTag);
 
+
+        //If the tag found it not a known one, throw an exception
         if(targetTagInfo == null){
             throw new RuntimeException("Error #AP02 AprilTag ID is not valid");
         }
         else{
+            //Init variables for robot position
             double beginPoseX;
             double beginPoseY;
             double beginPoseAng;
+            //Orientation checks. Look at functions for explaination
             boolean isAddition = checkTagOp(targetTagInfo.angle);
             boolean isXNegated = checkRelativeAng(targetTagInfo.angle);
             boolean areAxisInverted = checkAxisInversion(targetTagInfo.angle);
 
-
+            //Assignment based on ori checks.
             xToTargetTag = (isXNegated)? xToTargetTag : -xToTargetTag;
 
             double supportVar = xToTargetTag;
@@ -112,9 +121,7 @@ public final class SplineTest extends LinearOpMode {
             beginPoseX = (isAddition) ? xToTargetTag + targetTagInfo.xPos : xToTargetTag - targetTagInfo.xPos;
             beginPoseY = (isAddition) ? yToTargetTag + targetTagInfo.yPos : yToTargetTag - targetTagInfo.yPos;
 
-            telemetry.addLine("BeginPosX: " + beginPoseX);
-            telemetry.addLine("BeginPosY: " + beginPoseY);
-            telemetry.update();
+
 
             beginPoseAng = (angToTargetTag * -1) + targetTagInfo.angle - 180;
             if (beginPoseAng < 0)
@@ -122,8 +129,14 @@ public final class SplineTest extends LinearOpMode {
                 beginPoseAng += 360;
             }
 
-            beginPoseAng = Math.toRadians(beginPoseAng);
+            //Add to telemetry
+            telemetry.addLine("BeginPosX: " + beginPoseX);
+            telemetry.addLine("BeginPosY: " + beginPoseY);
+            telemetry.addLine("BeginPosY: " + beginPoseY);
+            telemetry.update();
 
+            beginPoseAng = Math.toRadians(beginPoseAng);
+            //Return the pose to the trajectory builder.
             return new Pose2d(beginPoseX,beginPoseY,beginPoseAng);
 
         }
@@ -135,6 +148,7 @@ public final class SplineTest extends LinearOpMode {
         //of the points of reference (AprilTags orientation)
         //This is analyzing the DICT information, NOT
         //The Detector metadata.
+        //
         return ang == 90 || ang == 0;
     }
     public boolean checkRelativeAng(int ang){
