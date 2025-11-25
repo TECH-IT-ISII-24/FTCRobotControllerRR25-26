@@ -29,20 +29,27 @@ public final class SplineTest extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-//        builder.setCamera(hardwareMap.get(WebcamName .class, "Webcam 1"));
-//
-//        aprilTag = new AprilTagProcessor.Builder().build();
-//        builder.addProcessor(aprilTag);
-//
-//
+        builder.setCamera(hardwareMap.get(WebcamName .class, "Webcam 1"));
+
+        aprilTag = new AprilTagProcessor.Builder().build();
+        builder.addProcessor(aprilTag);
+
+
         waitForStart();
         sleep(3000);
-//        while(aprilTag.getDetections().isEmpty()){}
-//
-//        findAprilTag();
+        AprilTagDetection foundTag;
+        while(true){
+            if (!aprilTag.getDetections().isEmpty()){
+                foundTag = aprilTag.getDetections().get(0);
+                break;
+            }
 
-        if (false) {
-            Pose2d beginPose = new Pose2d(0, 0, 0);
+        }
+
+        Pose2d beginPose = findAprilTag(foundTag);
+
+        if (true) {
+
             MecanumDrive drive = new MecanumDrive(hardwareMap, beginPose);
             Actions.runBlocking(
                 drive.actionBuilder(beginPose)
@@ -54,7 +61,7 @@ public final class SplineTest extends LinearOpMode {
 
     }
 
-    public void findAprilTag(){
+    public Pose2d findAprilTag(AprilTagDetection TargetTag){
 
         //TODO: Method this shit man wth
         Dictionary<Integer, AprilTagInformation> aprilTagDict = new Hashtable<>();
@@ -65,18 +72,10 @@ public final class SplineTest extends LinearOpMode {
         aprilTagDict.put(15,new AprilTagInformation(+72,+0, 270));
         aprilTagDict.put(16,new AprilTagInformation(+48,-72, 0));
 
-        List<AprilTagDetection> currentDetections = aprilTag.getDetections();
-        AprilTagDetection TargetTag;
-        try{
-            TargetTag = currentDetections.get(0);
-        }
-        catch(Exception e){
-            throw new RuntimeException("Error #AP00 No AprilTag Found");
-        }
-
         double xToTargetTag;
         double yToTargetTag;
         double idTargetTag;
+        double angToTargetTag;
 
         if(TargetTag.metadata == null) {
 
@@ -86,6 +85,7 @@ public final class SplineTest extends LinearOpMode {
             AprilTagPoseFtc TargetTagPos = TargetTag.ftcPose;
             xToTargetTag = TargetTagPos.x;
             yToTargetTag = TargetTagPos.y;
+            angToTargetTag = TargetTagPos.yaw;
             idTargetTag = TargetTag.id;
         }
 
@@ -97,6 +97,7 @@ public final class SplineTest extends LinearOpMode {
         else{
             double beginPoseX;
             double beginPoseY;
+            double beginPoseAng;
             boolean isAddition = checkTagOp(targetTagInfo.angle);
             boolean isXNegated = checkRelativeAng(targetTagInfo.angle);
             boolean areAxisInverted = checkAxisInversion(targetTagInfo.angle);
@@ -115,10 +116,15 @@ public final class SplineTest extends LinearOpMode {
             telemetry.addLine("BeginPosY: " + beginPoseY);
             telemetry.update();
 
+            beginPoseAng = (angToTargetTag * -1) + targetTagInfo.angle - 180;
+            if (beginPoseAng < 0)
+            {
+                beginPoseAng += 360;
+            }
 
-            //To calculate the heading you need to add both angles together and subtract by 180.
-            //TODO: normalize angle values so that they can be processed as radiant.
-            //Pose2d beginPose = new Pose2d(beginPoseX, beginPoseY, 0);
+            beginPoseAng = Math.toRadians(beginPoseAng);
+
+            return new Pose2d(beginPoseX,beginPoseY,beginPoseAng);
 
         }
 
