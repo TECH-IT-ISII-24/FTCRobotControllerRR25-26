@@ -127,6 +127,8 @@ public final class SplineTest extends LinearOpMode {
         //If the tag is within the negative zone, the operator
         //will be an addition due to the relativistic nature
         //of the points of reference (AprilTags orientation)
+        //This is analyzing the DICT information, NOT
+        //The Detector metadata.
         return ang == 90 || ang == 0;
     }
     public boolean checkRelativeAng(int ang){
