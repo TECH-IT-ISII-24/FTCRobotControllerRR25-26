@@ -12,7 +12,7 @@ public class HuskyTrackingTags extends LinearOpMode {
 
     private HuskyLens huskyLens;
     private ElapsedTime runtime = new ElapsedTime();
-    public List<Boolean> ballSequence = new LinkedList<>();
+    public List<Boolean> sequenza = new LinkedList<>();
 //VERDE == TRUE VIOLA == FALSE
 
     @Override
@@ -69,23 +69,23 @@ public class HuskyTrackingTags extends LinearOpMode {
                 switch(b.id)
                 {
                     case 2:
-                        ballSequence.add(true);
-                        ballSequence.add(false);
-                        ballSequence.add(false);
+                        sequenza.add(true);
+                        sequenza.add(false);
+                        sequenza.add(false);
                         break;
                         case 1:
-                            ballSequence.add(false);
-                            ballSequence.add(true);
-                            ballSequence.add(false);
+                            sequenza.add(false);
+                            sequenza.add(true);
+                            sequenza.add(false);
                     break;
                     case 3:
-                        ballSequence.add(false);
-                        ballSequence.add(false);
-                        ballSequence.add(true);
+                        sequenza.add(false);
+                        sequenza.add(false);
+                        sequenza.add(true);
                         break;
                 }
                 
-                getBallSequence();
+                debug();
             }
 
             // if tag not found, then not visible
@@ -97,15 +97,15 @@ public class HuskyTrackingTags extends LinearOpMode {
         }
     }
 
-    public void getBallSequence()
+    public void debug()
     {
         for (int i = 0; i < 3; ++i)
         {
-            for (boolean ball : ballSequence) {
+            for (boolean ball : sequenza) {
                 telemetry.addData("Current Ball", ball ? "Verde" : "Viola");
             }
         }
 
-        ballSequence.clear();
+        sequenza.clear();
     }
 }
