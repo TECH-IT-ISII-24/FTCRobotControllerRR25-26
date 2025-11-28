@@ -1,18 +1,19 @@
 package org.firstinspires.ftc.teamcode;
-
 import com.qualcomm.hardware.dfrobot.HuskyLens;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import java.util.LinkedList;
+import java.util.Queue;
 
 @TeleOp(name = "HuskyTrackingTags", group = "Sensor")
 public class HuskyTrackingTags extends LinearOpMode {
 
     private HuskyLens huskyLens;
     private ElapsedTime runtime = new ElapsedTime();
-
-    // tag to track
-    private final int TARGET_TAG = 1;
+    public Queue<Boolean> sequenza = new LinkedList<>();
+    public static int TARGET_TAG = 1;
+//VERDE == TRUE VIOLA == FALSE
 
     @Override
     public void runOpMode() {
@@ -61,10 +62,47 @@ public class HuskyTrackingTags extends LinearOpMode {
                         " Height=" + b.height);
                 
                 // check if tag is target
-                if (b.id == TARGET_TAG) {
+                /*if (b.id == 1) {
                     tagFound = true;
                     telemetry.addData("Locked Tag", "ID=" + b.id + " Center=(" + b.x + "," + b.y + ")");
+                }*/
+                switch(b.id)
+                {
+                    case 1:
+                        sequenza.add(true);
+                        sequenza.add(false);
+                        sequenza.add(false);
+                        sequenza.add(true);
+                        sequenza.add(false);
+                        sequenza.add(false);
+                        sequenza.add(true);
+                        sequenza.add(false);
+                        sequenza.add(false);
+                        break;
+                        case 2:
+                            sequenza.add(false);
+                            sequenza.add(true);
+                            sequenza.add(false);
+                            sequenza.add(false);
+                            sequenza.add(true);
+                            sequenza.add(false);
+                            sequenza.add(false);
+                            sequenza.add(true);
+                            sequenza.add(false);
+                    break;
+                    case 3:
+                        sequenza.add(false);
+                        sequenza.add(false);
+                        sequenza.add(true);
+                        sequenza.add(false);
+                        sequenza.add(false);
+                        sequenza.add(true);
+                        sequenza.add(false);
+                        sequenza.add(false);
+                        sequenza.add(true);
+                        break;
                 }
+                debug();
             }
 
             // if tag not found, then not visible
@@ -73,6 +111,22 @@ public class HuskyTrackingTags extends LinearOpMode {
             }
 
             telemetry.update();
+        }
+    }
+
+    public void debug()
+    {
+        for(int i = 0; i < 8; i++)
+        {
+            boolean risultato = sequenza.poll();
+            if(risultato)
+            {
+                System.out.println("Verde");
+            }
+            else
+            {
+                System.out.println("Viola");
+            }
         }
     }
 }
