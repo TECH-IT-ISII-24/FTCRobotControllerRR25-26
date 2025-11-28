@@ -121,12 +121,13 @@ public class HuskyTrackingTags extends LinearOpMode {
             boolean risultato = sequenza.poll();
             if(risultato)
             {
-                System.out.println("Verde");
+                telemetry.addData("c1", "Verde");
             }
             else
             {
-                System.out.println("Viola");
+                telemetry.addData("c2","Viola");
             }
+            telemetry.update();
         }
     }
 }
