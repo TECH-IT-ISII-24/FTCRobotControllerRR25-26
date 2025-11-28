@@ -50,7 +50,7 @@ public final class SplineTest extends LinearOpMode {
         //Call function to find intial pose to begin pathing
         Pose2d beginPose = findAprilTag(foundTag);
 
-        if (true) {
+        if (false) {
             //Run trajectory
             MecanumDrive drive = new MecanumDrive(hardwareMap, beginPose);
             Actions.runBlocking(
