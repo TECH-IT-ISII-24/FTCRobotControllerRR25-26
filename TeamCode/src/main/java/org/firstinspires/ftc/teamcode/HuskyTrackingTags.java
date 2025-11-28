@@ -13,11 +13,17 @@ public class HuskyTrackingTags extends LinearOpMode {
     private HuskyLens huskyLens;
     private ElapsedTime runtime = new ElapsedTime();
     public List<Boolean> sequenza = new LinkedList<>();
-//VERDE == TRUE VIOLA == FALSE
+    //VERDE == TRUE VIOLA == FALSE
+
+    // dimensione reale del AprilTag in cm
+    static final double TAG_REAL_SIZE_CM = 6.0;
+
+    // focale della camera in pixel
+    static final double FOCAL_LENGTH_PX = 900.0;
+
 
     @Override
     public void runOpMode() {
-
         // initialize huskylens from hardwareMap
         huskyLens = hardwareMap.get(HuskyLens.class, "huskylens");
 
@@ -53,19 +59,23 @@ public class HuskyTrackingTags extends LinearOpMode {
             for (int i = 0; i < blocks.length; i++) {
                 HuskyLens.Block b = blocks[i];
 
-                /*
+                double distanceCm = estimateDistanceCm(b.height);  // height è più stabile
+
                 telemetry.addData("Block " + i,
                         "ID=" + b.id +
-                        " X=" + b.x +
-                        " Y=" + b.y +
-                        " Width=" + b.width +
-                        " Height=" + b.height);
-                
+                                " X=" + b.x +
+                                " Y=" + b.y +
+                                " Width=" + b.width +
+                                " Height=" + b.height +
+                                " Dist=" + String.format("%.1f", distanceCm) + "cm");
+
+                /*
                 // check if tag is target
                 if (b.id == 1) {
                     tagFound = true;
                     telemetry.addData("Locked Tag", "ID=" + b.id + " Center=(" + b.x + "," + b.y + ")");
                 }*/
+
                 switch(b.id)
                 {
                     case 2:
@@ -85,7 +95,7 @@ public class HuskyTrackingTags extends LinearOpMode {
                         break;
                 }
                 
-                debug();
+                //debug();
             }
 
             // if tag not found, then not visible
@@ -107,5 +117,9 @@ public class HuskyTrackingTags extends LinearOpMode {
         }
 
         sequenza.clear();
+    }
+
+    double estimateDistanceCm(double tagSizePx) {
+        return (TAG_REAL_SIZE_CM * FOCAL_LENGTH_PX) / tagSizePx;
     }
 }
