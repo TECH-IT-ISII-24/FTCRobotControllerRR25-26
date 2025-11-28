@@ -54,6 +54,7 @@ public class HuskyTrackingTags extends LinearOpMode {
             for (int i = 0; i < blocks.length; i++) {
                 HuskyLens.Block b = blocks[i];
 
+                /*
                 telemetry.addData("Block " + i,
                         "ID=" + b.id +
                         " X=" + b.x +
@@ -62,13 +63,13 @@ public class HuskyTrackingTags extends LinearOpMode {
                         " Height=" + b.height);
                 
                 // check if tag is target
-                /*if (b.id == 1) {
+                if (b.id == 1) {
                     tagFound = true;
                     telemetry.addData("Locked Tag", "ID=" + b.id + " Center=(" + b.x + "," + b.y + ")");
                 }*/
                 switch(b.id)
                 {
-                    case 1:
+                    case 2:
                         sequenza.add(true);
                         sequenza.add(false);
                         sequenza.add(false);
@@ -79,7 +80,7 @@ public class HuskyTrackingTags extends LinearOpMode {
                         sequenza.add(false);
                         sequenza.add(false);
                         break;
-                        case 2:
+                        case 1:
                             sequenza.add(false);
                             sequenza.add(true);
                             sequenza.add(false);
@@ -116,18 +117,18 @@ public class HuskyTrackingTags extends LinearOpMode {
 
     public void debug()
     {
-        for(int i = 0; i < 8; i++)
+        for(int i = 0; i < 9; i++)
         {
-            boolean risultato = sequenza.poll();
+            boolean risultato = Boolean.TRUE.equals(sequenza.poll());
             if(risultato)
             {
                 telemetry.addData("c1", "Verde");
             }
-            else
-            {
-                telemetry.addData("c2","Viola");
+            else {
+                telemetry.addData("c2", "Viola");
             }
-            telemetry.update();
         }
+
+        sequenza.clear();
     }
 }
