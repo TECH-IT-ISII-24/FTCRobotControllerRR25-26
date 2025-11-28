@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 
 @TeleOp(name = "HuskyTrackingTags", group = "Sensor")
@@ -11,8 +12,7 @@ public class HuskyTrackingTags extends LinearOpMode {
 
     private HuskyLens huskyLens;
     private ElapsedTime runtime = new ElapsedTime();
-    public Queue<Boolean> sequenza = new LinkedList<>();
-    public static int TARGET_TAG = 1;
+    public List<Boolean> ballSequence = new LinkedList<>();
 //VERDE == TRUE VIOLA == FALSE
 
     @Override
@@ -35,7 +35,6 @@ public class HuskyTrackingTags extends LinearOpMode {
         // set mode to tag recognition
         huskyLens.selectAlgorithm(HuskyLens.Algorithm.TAG_RECOGNITION);
         telemetry.addData("Status", "Tag Recognition Mode Enabled");
-        telemetry.addData("Tracking Tag ID", TARGET_TAG);
         telemetry.update();
 
         waitForStart();
@@ -70,40 +69,23 @@ public class HuskyTrackingTags extends LinearOpMode {
                 switch(b.id)
                 {
                     case 2:
-                        sequenza.add(true);
-                        sequenza.add(false);
-                        sequenza.add(false);
-                        sequenza.add(true);
-                        sequenza.add(false);
-                        sequenza.add(false);
-                        sequenza.add(true);
-                        sequenza.add(false);
-                        sequenza.add(false);
+                        ballSequence.add(true);
+                        ballSequence.add(false);
+                        ballSequence.add(false);
                         break;
                         case 1:
-                            sequenza.add(false);
-                            sequenza.add(true);
-                            sequenza.add(false);
-                            sequenza.add(false);
-                            sequenza.add(true);
-                            sequenza.add(false);
-                            sequenza.add(false);
-                            sequenza.add(true);
-                            sequenza.add(false);
+                            ballSequence.add(false);
+                            ballSequence.add(true);
+                            ballSequence.add(false);
                     break;
                     case 3:
-                        sequenza.add(false);
-                        sequenza.add(false);
-                        sequenza.add(true);
-                        sequenza.add(false);
-                        sequenza.add(false);
-                        sequenza.add(true);
-                        sequenza.add(false);
-                        sequenza.add(false);
-                        sequenza.add(true);
+                        ballSequence.add(false);
+                        ballSequence.add(false);
+                        ballSequence.add(true);
                         break;
                 }
-                debug();
+                
+                getBallSequence();
             }
 
             // if tag not found, then not visible
@@ -115,20 +97,15 @@ public class HuskyTrackingTags extends LinearOpMode {
         }
     }
 
-    public void debug()
+    public void getBallSequence()
     {
-        for(int i = 0; i < 9; i++)
+        for (int i = 0; i < 3; ++i)
         {
-            boolean risultato = Boolean.TRUE.equals(sequenza.poll());
-            if(risultato)
-            {
-                telemetry.addData("c1", "Verde");
-            }
-            else {
-                telemetry.addData("c2", "Viola");
+            for (boolean ball : ballSequence) {
+                telemetry.addData("Current Ball", ball ? "Verde" : "Viola");
             }
         }
 
-        sequenza.clear();
+        ballSequence.clear();
     }
 }
