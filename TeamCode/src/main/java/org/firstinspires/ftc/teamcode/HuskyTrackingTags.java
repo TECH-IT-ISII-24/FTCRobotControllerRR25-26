@@ -15,10 +15,10 @@ public class HuskyTrackingTags extends LinearOpMode {
     public List<Boolean> sequenza = new LinkedList<>();
     //VERDE == TRUE VIOLA == FALSE
 
-    // dimensione reale del AprilTag in cm
+    // real size of the tag
     static final double TAG_REAL_SIZE_CM = 6.0;
 
-    // focale della camera in pixel
+    // focal lenght of husky camera
     static final double FOCAL_LENGTH_PX = 900.0;
 
 
