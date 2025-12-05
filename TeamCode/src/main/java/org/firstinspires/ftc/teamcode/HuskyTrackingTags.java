@@ -13,7 +13,7 @@ public class HuskyTrackingTags extends LinearOpMode {
     private HuskyLens huskyLens;
     private ElapsedTime runtime = new ElapsedTime();
     public List<Boolean> sequenza = new LinkedList<>();
-//VERDE == TRUE VIOLA == FALSE
+    //VERDE == TRUE VIOLA == FALSE
 
     @Override
     public void runOpMode() {
