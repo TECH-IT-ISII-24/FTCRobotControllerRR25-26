@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import java.util.LinkedList;
 import java.util.List;
 
-@TeleOp(name = "HuskyTrackingTags", group = "Sensor")
+@TeleOp(name = "HuskyTrackingPosizione", group = "Sensor")
 public class HuskyTrackingPosizione extends LinearOpMode {
 
     private HuskyLens huskyLens;
@@ -50,6 +50,7 @@ public class HuskyTrackingPosizione extends LinearOpMode {
             telemetry.addData("Detected Blocks", blocks.length);
 
             boolean tagFound = false;
+            boolean ritorno = false;
 
             for (int i = 0; i < blocks.length; i++) {
                 HuskyLens.Block b = blocks[i];
@@ -73,23 +74,23 @@ public class HuskyTrackingPosizione extends LinearOpMode {
                         sequenza.add(true);
                         sequenza.add(false);
                         sequenza.add(false);
-                        VerificaPosizione(b);
+                        ritorno = VerificaPosizione(b);
                         break;
                         case 1:
                             sequenza.add(false);
                             sequenza.add(true);
                             sequenza.add(false);
-                            VerificaPosizione(b);
+                            ritorno = VerificaPosizione(b);
                             break;
                     case 3:
                         sequenza.add(false);
                         sequenza.add(false);
                         sequenza.add(true);
-                        VerificaPosizione(b);
+                        ritorno = VerificaPosizione(b);
                         break;
                 }
 
-                debug();
+                debug(ritorno);
             }
 
             // if tag not found, then not visible
@@ -101,29 +102,39 @@ public class HuskyTrackingPosizione extends LinearOpMode {
         }
     }
 
-    public void VerificaPosizione(HuskyLens.Block tag)
+    public boolean VerificaPosizione(HuskyLens.Block tag)
     {
             int error = tag.x - 160;
             //10 sta ad indicare la tolleranza
             float vToll = Math.abs(error);
             if (vToll > 10) {
-                telemetry.addData("Status","Il robot deve muoversi");
-                telemetry.update();
-                //Se la tolleranza è maggiore di 10, allora la posizione del robot va fixata
-                //Qui si deve muovere il bot
+                /*if(error > 0)
+                {
+                    //Qua deve andare a sinistra
+                }
+                else
+                {
+                    //Qua deve andare a destra
+                }*/
+                return false;
             } else {
-                telemetry.addData("Status", "Il tag è allineato correttamente!");
-                telemetry.update();
+                return true;
             }
     }
 
-    public void debug()
+    public void debug(boolean ritorno)
     {
         for (int i = 0; i < 3; ++i)
         {
             for (boolean ball : sequenza) {
                 telemetry.addData("Current Ball", ball ? "Verde" : "Viola");
             }
+        }
+        if(ritorno == true) {
+            telemetry.addData("Status", "Ok pos corretta");
+        }
+        else{
+            telemetry.addData("Status", "Pos errata");
         }
 
         sequenza.clear();
