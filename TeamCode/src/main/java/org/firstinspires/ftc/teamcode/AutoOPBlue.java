@@ -19,7 +19,7 @@ public class AutoOPBlue extends LinearOpMode {
     public void runOpMode() {
         // hardware init
         odo = hardwareMap.get(GoBildaPinpointDriver.class, "pinpoint");
-        odo.setOffsets(58.0, -167.0);
+        odo.setOffsets(60.0, -175.0);
         odo.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
         odo.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.FORWARD, GoBildaPinpointDriver.EncoderDirection.REVERSED);
 
@@ -66,9 +66,7 @@ public class AutoOPBlue extends LinearOpMode {
         driveToPoint(31, -39, 0); // endpos
     }
 
-    public void driveToPoint(double targetInX, double targetInY, double targetDegH) {
-        double targetX = targetInX * IN_TO_MM;
-        double targetY = targetInY * IN_TO_MM;
+    public void driveToPoint(double targetX, double targetY, double targetDegH) {
 
         while (opModeIsActive()) {
             odo.update();
