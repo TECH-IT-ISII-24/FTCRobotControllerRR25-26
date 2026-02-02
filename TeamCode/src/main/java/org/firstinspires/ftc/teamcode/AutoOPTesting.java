@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.vision.VisionPortal;
@@ -15,10 +16,21 @@ import java.util.Hashtable;
 import java.util.List;
 
 
-
+@Autonomous(name = "AutoOPTesting", group = "Development")
 public final class AutoOPTesting extends LinearOpMode {
+
+    public GoBildaPinpointDriver pinpoint;
+
     @Override
     public void runOpMode() throws InterruptedException {
+        pinpoint = hardwareMap.get(GoBildaPinpointDriver.class, "pinpoint");
+        pinpoint.resetDeviceConfigurationForOpMode();
+        pinpoint.resetPosAndIMU();
+        pinpoint.recalibrateIMU();
+        pinpoint.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.REVERSED, GoBildaPinpointDriver.EncoderDirection.REVERSED);
+
+        sleep(3000);
+
         waitForStart();
 
         if (true) {
@@ -26,8 +38,9 @@ public final class AutoOPTesting extends LinearOpMode {
             MecanumDrive drive = new MecanumDrive(hardwareMap, beginPose);
             Actions.runBlocking(
                     drive.actionBuilder(beginPose)
-                            .splineTo(new Vector2d(30, 30), Math.PI / 2)
-                            .splineTo(new Vector2d(0, 60), Math.PI)
+                            .strafeToLinearHeading(new Vector2d(-24, -36), - Math.PI)
+                            .strafeToLinearHeading(new Vector2d(-54, -36), - Math.PI)
+                            //.strafeToLinearHeading(new Vector2d(-24, 24), 3 * Math.PI / 4)
                             .build());
         }
 
