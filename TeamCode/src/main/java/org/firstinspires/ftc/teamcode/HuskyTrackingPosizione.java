@@ -16,6 +16,8 @@ public class HuskyTrackingPosizione extends LinearOpMode {
     public List<Boolean> sequenza = new LinkedList<>();
     //VERDE == TRUE VIOLA == FALSE
 
+    public boolean redAlliance = true;
+
     @Override
     public void runOpMode() {
 
@@ -55,41 +57,10 @@ public class HuskyTrackingPosizione extends LinearOpMode {
             for (int i = 0; i < blocks.length; i++) {
                 HuskyLens.Block b = blocks[i];
 
-                /*
-                telemetry.addData("Block " + i,
-                        "ID=" + b.id +
-                        " X=" + b.x +
-                        " Y=" + b.y +
-                        " Width=" + b.width +
-                        " Height=" + b.height);
+                if (redAlliance && b.id != 1)  continue;
+                if (!redAlliance && b.id != 2)  continue;
 
-                // check if tag is target
-                if (b.id == 1) {
-                    tagFound = true;
-                    telemetry.addData("Locked Tag", "ID=" + b.id + " Center=(" + b.x + "," + b.y + ")");
-                }*/
-                switch(b.id)
-                {
-                    case 2:
-                        sequenza.add(true);
-                        sequenza.add(false);
-                        sequenza.add(false);
-                        ritorno = VerificaPosizione(b);
-                        break;
-                        case 1:
-                            sequenza.add(false);
-                            sequenza.add(true);
-                            sequenza.add(false);
-                            ritorno = VerificaPosizione(b);
-                            break;
-                    case 3:
-                        sequenza.add(false);
-                        sequenza.add(false);
-                        sequenza.add(true);
-                        ritorno = VerificaPosizione(b);
-                        break;
-                }
-
+                ritorno = VerificaPosizione(b);
                 debug(ritorno);
             }
 
@@ -105,17 +76,19 @@ public class HuskyTrackingPosizione extends LinearOpMode {
     public boolean VerificaPosizione(HuskyLens.Block tag)
     {
             int error = tag.x - 160;
-            //10 sta ad indicare la tolleranza
             float vToll = Math.abs(error);
+
+            telemetry.addData("vToll value", vToll);
+
             if (vToll > 10) {
-                /*if(error > 0)
+                if(error > 0)
                 {
-                    //Qua deve andare a sinistra
+                    telemetry.addData("Predicted move", "Left");
                 }
                 else
                 {
-                    //Qua deve andare a destra
-                }*/
+                    telemetry.addData("Predicted move", "Right");
+                }
                 return false;
             } else {
                 return true;
@@ -130,7 +103,7 @@ public class HuskyTrackingPosizione extends LinearOpMode {
                 telemetry.addData("Current Ball", ball ? "Verde" : "Viola");
             }
         }
-        if(ritorno == true) {
+        if(ritorno) {
             telemetry.addData("Status", "Ok pos corretta");
         }
         else{
