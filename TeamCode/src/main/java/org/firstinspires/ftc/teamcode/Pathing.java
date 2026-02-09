@@ -4,6 +4,7 @@ import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
@@ -15,7 +16,7 @@ import java.util.Hashtable;
 import java.util.List;
 
 
-
+@TeleOp(name="PathingTest", group="FINAL")
 public final class Pathing extends LinearOpMode {
     private AprilTagProcessor aprilTag;
     private VisionPortal visionPortal;
@@ -40,7 +41,7 @@ public final class Pathing extends LinearOpMode {
 //        findAprilTag();
 
         if (true) {
-            Pose2d beginPose = new Pose2d(0, 0, 0);
+            Pose2d beginPose = new Pose2d(-24, -63, Math.PI / 2);
             MecanumDrive drive = new MecanumDrive(hardwareMap, beginPose);
             Actions.runBlocking(
                 drive.actionBuilder(beginPose)
