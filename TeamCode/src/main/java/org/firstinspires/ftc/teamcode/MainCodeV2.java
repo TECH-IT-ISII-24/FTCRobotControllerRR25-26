@@ -84,6 +84,8 @@ public class MainCodeV2 extends LinearOpMode {
     private DcMotorEx rightBackDrive = null;
     private DcMotorEx rightFrontDrive = null;
 
+    private DcMotorEx launcherDrive = null;
+
     private GoBildaPinpointDriver odo = null;
     private ElapsedTime runtime = new ElapsedTime();
 
@@ -113,6 +115,7 @@ public class MainCodeV2 extends LinearOpMode {
         leftBackDrive = hardwareMap.get(DcMotorEx.class, "left_back_drive");
         rightBackDrive = hardwareMap.get(DcMotorEx.class, "right_back_drive");
         rightFrontDrive = hardwareMap.get(DcMotorEx.class, "right_front_drive");
+        launcherDrive = hardwareMap.get(DcMotorEx.class, "launcher_drive");
 
         odo.setOffsets(58.0, -167.0); //these are tuned for 3110-0002-0001 Product Insight #1
 
@@ -190,6 +193,15 @@ public class MainCodeV2 extends LinearOpMode {
             rightFrontDrive.setPower(rightBackPower);
             leftBackDrive.setPower(leftFrontPower);
             rightBackDrive.setPower(rightFrontPower);
+            if(gamepad1.dpad_down){
+                launcherDrive.setPower(1);
+            }else if (gamepad1.dpad_up){
+                launcherDrive.setPower(-1);
+
+            }
+            else{
+                launcherDrive.setPower(0);
+            }
             double newTime = getRuntime();
             double loopTime = newTime-oldTime;
             double frequency = 1/loopTime;

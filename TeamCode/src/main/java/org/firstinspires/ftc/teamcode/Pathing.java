@@ -145,14 +145,3 @@ public final class Pathing extends LinearOpMode {
 }
 
 
-class AprilTagInformation{
-    int xPos;
-    int yPos;
-    int angle;
-
-    public AprilTagInformation(int x, int y, int ang) {
-         xPos = x;
-         yPos = y;
-         angle = ang;
-    }
-}
