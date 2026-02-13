@@ -3,8 +3,8 @@ package org.firstinspires.ftc.teamcode;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
@@ -15,6 +15,8 @@ import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.List;
 
+
+@TeleOp(name="PathingTest", group="FINAL")
 public final class Pathing extends LinearOpMode {
     private AprilTagProcessor aprilTag;
     private VisionPortal visionPortal;
