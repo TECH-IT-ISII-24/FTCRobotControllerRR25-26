@@ -33,8 +33,8 @@ public final class PinpointLocalizer implements Localizer {
         double mmPerTick = 25.4 * inPerTick;
         driver.setEncoderResolution(1 / mmPerTick);
         //driver.setEncoderResolution(19.894);
-        driver.setOffsets(mmPerTick * PARAMS.parYTicks, mmPerTick * PARAMS.perpXTicks);
-        //driver.setOffsets(-60, +175);
+        //driver.setOffsets(mmPerTick * PARAMS.parYTicks, mmPerTick * PARAMS.perpXTicks);
+        driver.setOffsets(-60, +175);
         //Y: 0.0129404079
         //X: 0.0044942734
 

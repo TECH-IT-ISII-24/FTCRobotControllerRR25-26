@@ -17,7 +17,7 @@ import java.util.Hashtable;
 import java.util.List;
 
 
-@TeleOp(name = "AutoOPTesting", group = "Development")
+@Autonomous(name = "AutoOPTesting", group = "Development")
 public final class AutoOPTesting extends LinearOpMode {
 
     public GoBildaPinpointDriver pinpoint;
@@ -37,22 +37,12 @@ public final class AutoOPTesting extends LinearOpMode {
 
         Pose2d beginPose = new Pose2d(-24, -63, Math.PI / 2);
         MecanumDrive drive = new MecanumDrive(hardwareMap, beginPose);
-            /*Actions.runBlocking(
+            Actions.runBlocking(
                     drive.actionBuilder(beginPose)
                             .strafeToLinearHeading(new Vector2d(-24, -35), Math.PI)
-                            //!.strafeToLinearHeading(new Vector2d(-24, -36), Math.PI)
+                            //.strafeToLinearHeading(new Vector2d(-24, -36), Math.PI)
                             //.strafeToLinearHeading(new Vector2d(-35, -36), - Math.PI)
                             //.strafeToLinearHeading(new Vector2d(-24, 4), 3 * Math.PI / 4)
-                            .build());*/
-
-        while (true) {
-            pinpoint.update();
-
-            telemetry.addData("heading", Math.toDegrees(pinpoint.getHeading()));
-            telemetry.addData("x", pinpoint.getEncoderX());
-            telemetry.addData("y", pinpoint.getEncoderY());
-            telemetry.update();
-        }
-
+                            .build());
     }
 }
