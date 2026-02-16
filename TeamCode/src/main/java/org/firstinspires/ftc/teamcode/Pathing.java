@@ -45,10 +45,10 @@ public final class Pathing extends LinearOpMode {
             MecanumDrive drive = new MecanumDrive(hardwareMap, beginPose);
             Actions.runBlocking(
                 drive.actionBuilder(beginPose)
-                        .strafeToLinearHeading(new Vector2d(-24, -36), - Math.PI)
-                        .strafeToLinearHeading(new Vector2d(-54, -36), - Math.PI)
-                        .strafeToLinearHeading(new Vector2d(-24, 24), 3 * Math.PI / 4)
-                        //.splineTo(new Vector2d(0, 60), Math.PI)
+                        .strafeToLinearHeading(new Vector2d(-24, -35), Math.PI / 2)
+                        .strafeToLinearHeading(new Vector2d(-24, -36), Math.PI)
+                        //.strafeToLinearHeading(new Vector2d(-35, -36), - Math.PI)
+                        //.strafeToLinearHeading(new Vector2d(-24, 4), 3 * Math.PI / 4)
                         .build());
         }
 
