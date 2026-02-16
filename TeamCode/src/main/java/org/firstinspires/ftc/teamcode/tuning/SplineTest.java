@@ -41,7 +41,7 @@ public final class SplineTest extends LinearOpMode {
 //
 //        findAprilTag();
 
-        if (false) {
+        if (true) {
             Pose2d beginPose = new Pose2d(0, 0, 0);
             MecanumDrive drive = new MecanumDrive(hardwareMap, beginPose);
             Actions.runBlocking(
