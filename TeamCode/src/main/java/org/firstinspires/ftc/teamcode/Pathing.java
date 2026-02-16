@@ -18,22 +18,36 @@ import java.util.List;
 
 @TeleOp(name="PathingTest", group="FINAL")
 public final class Pathing extends LinearOpMode {
+    private AprilTagProcessor aprilTag;
+    private VisionPortal visionPortal;
+    VisionPortal.Builder builder = new VisionPortal.Builder();
+
+
+
+
 
     @Override
     public void runOpMode() throws InterruptedException {
+//        builder.setCamera(hardwareMap.get(WebcamName .class, "Webcam 1"));
+//
+//        aprilTag = new AprilTagProcessor.Builder().build();
+//        builder.addProcessor(aprilTag);
+//
 //
         waitForStart();
+        sleep(3000);
+//        while(aprilTag.getDetections().isEmpty()){}
+//
+//        findAprilTag();
 
         if (true) {
-            Pose2d beginPose = new Pose2d(+63, -24, Math.PI);
+            Pose2d beginPose = new Pose2d(-24, -63, Math.PI / 2);
             MecanumDrive drive = new MecanumDrive(hardwareMap, beginPose);
-
             Actions.runBlocking(
                 drive.actionBuilder(beginPose)
-                        .strafeToLinearHeading(new Vector2d(0, -24), Math.PI/2)
-                       //.strafeToLinearHeading(new Vector2d(0, 24), Math.PI /2 )
-//                        .strafeToLinearHeading(new Vector2d(-12, -52), - Math.PI/ 2)
-//                        .strafeToLinearHeading(new Vector2d(-24, -24), - 3* Math.PI / 4)
+                        .strafeToLinearHeading(new Vector2d(-24, -36), - Math.PI)
+                        .strafeToLinearHeading(new Vector2d(-54, -36), - Math.PI)
+                        .strafeToLinearHeading(new Vector2d(-24, 24), 3 * Math.PI / 4)
                         //.splineTo(new Vector2d(0, 60), Math.PI)
                         .build());
         }

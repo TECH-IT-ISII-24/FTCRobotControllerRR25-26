@@ -5,6 +5,7 @@ import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
@@ -33,17 +34,15 @@ public final class AutoOPTesting extends LinearOpMode {
 
         waitForStart();
 
-        if (true) {
-            Pose2d beginPose = new Pose2d(0, 0, 0);
-            MecanumDrive drive = new MecanumDrive(hardwareMap, beginPose);
+
+        Pose2d beginPose = new Pose2d(-24, -63, Math.PI / 2);
+        MecanumDrive drive = new MecanumDrive(hardwareMap, beginPose);
             Actions.runBlocking(
                     drive.actionBuilder(beginPose)
-                            .strafeToLinearHeading(new Vector2d(-24, -36), - Math.PI)
-                            .strafeToLinearHeading(new Vector2d(-54, -36), - Math.PI)
-                            //.strafeToLinearHeading(new Vector2d(-24, 24), 3 * Math.PI / 4)
+                            .strafeToLinearHeading(new Vector2d(-24, -35), Math.PI)
+                            //.strafeToLinearHeading(new Vector2d(-24, -36), Math.PI)
+                            //.strafeToLinearHeading(new Vector2d(-35, -36), - Math.PI)
+                            //.strafeToLinearHeading(new Vector2d(-24, 4), 3 * Math.PI / 4)
                             .build());
-        }
-
-
     }
 }
