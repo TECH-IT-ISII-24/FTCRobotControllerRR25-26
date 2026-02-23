@@ -117,7 +117,7 @@ public class MainCodeV2 extends LinearOpMode {
         rightBackDrive = hardwareMap.get(DcMotorEx.class, "right_back_drive");
         rightFrontDrive = hardwareMap.get(DcMotorEx.class, "right_front_drive");
         launcherDrive = hardwareMap.get(DcMotorEx.class, "launcher_drive");
-        shooterDrive = hardwareMap.get(DcMotorEx.class, "shooter_drive");
+        //shooterDrive = hardwareMap.get(DcMotorEx.class, "shooter_drive");
 
         odo.setOffsets(-60, +175.0); //these are tuned for 3110-0002-0001 Product Insight #1
 
@@ -207,14 +207,14 @@ public class MainCodeV2 extends LinearOpMode {
                 launcherDrive.setPower(0);
             }
 
-            if(gamepad1.triangle) {
-                shooterDrive.setPower(1);
-            }
-            else if(gamepad1.dpad_left){
-                shooterDrive.setPower(-1);
-            }else {
-                shooterDrive.setPower(0);
-            }
+//            if(gamepad1.triangle) {
+//                shooterDrive.setPower(1);
+//            }
+//            else if(gamepad1.dpad_left){
+//                shooterDrive.setPower(-1);
+//            }else {
+//                shooterDrive.setPower(0);
+//            }
 
             double newTime = getRuntime();
             double loopTime = newTime-oldTime;
