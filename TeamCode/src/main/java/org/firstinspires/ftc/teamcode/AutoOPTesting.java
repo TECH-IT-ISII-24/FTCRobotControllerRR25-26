@@ -36,10 +36,9 @@ public final class AutoOPTesting extends LinearOpMode {
         MecanumDrive drive = new MecanumDrive(hardwareMap, beginPose);
             Actions.runBlocking(
                     drive.actionBuilder(beginPose)
-                            .setTangent(Math.PI / 2)
-                            //.splineToSplineHeading(new Pose2d(-24, 0, Math.PI), Math.PI / 2)
-                            .strafeToLinearHeading(FixedVector(-48, 24) , Math.PI)
-                            .splineToLinearHeading(FixedPose(-24, -48, Math.PI/2), Math.PI / 2)
+                            .setTangent(Math.PI/ 2)
+                            .strafeToLinearHeading(new Vector2d(48, 24) , Math.PI)
+                            .splineToLinearHeading(new Pose2d(24, 48, -Math.PI/2), Math.PI)
                             //.strafeToLinearHeading(new Vector2d(-35, -36), - Math.PI)
                             //.strafeToLinearHeading(new Vector2d(-24, 4), 3 * Math.PI / 4)
                             .build());
