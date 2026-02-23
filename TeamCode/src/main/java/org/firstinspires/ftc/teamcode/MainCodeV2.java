@@ -117,7 +117,7 @@ public class MainCodeV2 extends LinearOpMode {
         rightBackDrive = hardwareMap.get(DcMotorEx.class, "right_back_drive");
         rightFrontDrive = hardwareMap.get(DcMotorEx.class, "right_front_drive");
         launcherDrive = hardwareMap.get(DcMotorEx.class, "launcher_drive");
-        //shooterDrive = hardwareMap.get(DcMotorEx.class, "shooter_drive");
+        shooterDrive = hardwareMap.get(DcMotorEx.class, "shooter_drive");
 
         odo.setOffsets(-60, +175.0); //these are tuned for 3110-0002-0001 Product Insight #1
 
@@ -134,6 +134,11 @@ public class MainCodeV2 extends LinearOpMode {
         leftBackDrive.setDirection(DcMotor.Direction.REVERSE);
         rightFrontDrive.setDirection(DcMotor.Direction.FORWARD);
         rightBackDrive.setDirection(DcMotor.Direction.FORWARD);
+
+        leftFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rightFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        leftBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rightBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         // Wait for the game to start (driver presses START)
         telemetry.addData("Status", "Initialized");
@@ -198,28 +203,23 @@ public class MainCodeV2 extends LinearOpMode {
             leftBackDrive.setPower(leftFrontPower);
             rightBackDrive.setPower(rightFrontPower);
 
-            if(gamepad1.dpad_down){
+            if(gamepad1.triangle){
                 launcherDrive.setPower(1);
-            }else if (gamepad1.dpad_up){
+            }else if (gamepad1.x){
                 launcherDrive.setPower(-1);
             }
             else{
                 launcherDrive.setPower(0);
             }
 
-//            if(gamepad1.triangle) {
-//                shooterDrive.setPower(1);
-//            }
-//            else if(gamepad1.dpad_left){
-//                shooterDrive.setPower(-1);
-//            }else {
-//                shooterDrive.setPower(0);
-//            }
-
-            double newTime = getRuntime();
-            double loopTime = newTime-oldTime;
-            double frequency = 1/loopTime;
-            oldTime = newTime;
+            if(gamepad1.left_bumper) {
+                shooterDrive.setPower(1);
+            }
+            else if(gamepad1.right_bumper){
+                shooterDrive.setPower(-1);
+            }else {
+                shooterDrive.setPower(0);
+            }
 
 
             /*
@@ -239,8 +239,6 @@ public class MainCodeV2 extends LinearOpMode {
 
             telemetry.addData("Pinpoint Frequency", odo.getFrequency()); //prints/gets the current refresh rate of the Pinpoint
 
-            telemetry.addData("REV Hub Frequency: ", frequency); //prints the control system refresh rate
-            ;
             // Show the elapsed game time and wheel power.
             telemetry.addData("Status", "Run Time: " + runtime.toString());
             telemetry.addData("Front left/Right", "%4.2f, %4.2f", leftFrontPower, rightFrontPower);
