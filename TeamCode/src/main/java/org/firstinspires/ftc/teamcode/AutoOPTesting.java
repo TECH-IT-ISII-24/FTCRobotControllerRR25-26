@@ -24,11 +24,7 @@ public final class AutoOPTesting extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        pinpoint = hardwareMap.get(GoBildaPinpointDriver.class, "pinpoint");
-        pinpoint.resetDeviceConfigurationForOpMode();
-        pinpoint.resetPosAndIMU();
-        pinpoint.recalibrateIMU();
-        pinpoint.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.REVERSED, GoBildaPinpointDriver.EncoderDirection.REVERSED);
+
 
         sleep(3000);
 

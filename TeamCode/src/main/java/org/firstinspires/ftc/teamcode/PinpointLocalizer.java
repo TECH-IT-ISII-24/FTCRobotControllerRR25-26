@@ -7,6 +7,9 @@ import com.acmerobotics.roadrunner.Rotation2d;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.PinpointView;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.IMU;
+
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
 import java.util.Objects;
 
@@ -20,6 +23,7 @@ public final class PinpointLocalizer implements Localizer {
     public static Params PARAMS = new Params();
 
     public final GoBildaPinpointDriver driver;
+
     public final GoBildaPinpointDriver.EncoderDirection initialParDirection, initialPerpDirection;
 
     private Pose2d txWorldPinpoint;
@@ -30,11 +34,12 @@ public final class PinpointLocalizer implements Localizer {
         //   see https://ftc-docs.firstinspires.org/en/latest/hardware_and_software_configuration/configuring/index.html
         driver = hardwareMap.get(GoBildaPinpointDriver.class, "pinpoint");
 
-        double mmPerTick = 25.4 * inPerTick;
-        driver.setEncoderResolution(1 / mmPerTick);
+        double mmPerTick = 25.4 * inPerTick; //0,0475996
+        //driver.setEncoderResolution(1 / mmPerTick);
+        driver.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
         //driver.setEncoderResolution(19.894);
         //driver.setOffsets(mmPerTick * PARAMS.parYTicks, mmPerTick * PARAMS.perpXTicks);
-        driver.setOffsets(-60, +175);
+        driver.setOffsets(+60, +175);
         //Y: 0.0129404079
         //X: 0.0044942734
 
@@ -66,7 +71,10 @@ public final class PinpointLocalizer implements Localizer {
             txPinpointRobot = new Pose2d(driver.getPosX() / 25.4, driver.getPosY() / 25.4, driver.getHeading());
             Vector2d worldVelocity = new Vector2d(driver.getVelX() / 25.4, driver.getVelY() / 25.4);
             Vector2d robotVelocity = Rotation2d.fromDouble(-driver.getHeading()).times(worldVelocity);
+
             return new PoseVelocity2d(robotVelocity, driver.getHeadingVelocity());
+
+
         }
         return new PoseVelocity2d(new Vector2d(0, 0), 0);
     }

@@ -138,6 +138,8 @@ public class MainCodeV2 extends LinearOpMode {
         // Wait for the game to start (driver presses START)
         telemetry.addData("Status", "Initialized");
         telemetry.update();
+        odo.resetPosAndIMU();
+
 
         waitForStart();
         runtime.reset();
@@ -145,7 +147,7 @@ public class MainCodeV2 extends LinearOpMode {
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
 
-            //odo.update();
+            odo.update();
             double max;
 
             // POV Mode uses left joystick to go forward & strafe, and right joystick to rotate.
@@ -195,6 +197,7 @@ public class MainCodeV2 extends LinearOpMode {
             rightFrontDrive.setPower(rightBackPower);
             leftBackDrive.setPower(leftFrontPower);
             rightBackDrive.setPower(rightFrontPower);
+
             if(gamepad1.dpad_down){
                 launcherDrive.setPower(1);
             }else if (gamepad1.dpad_up){
@@ -207,7 +210,7 @@ public class MainCodeV2 extends LinearOpMode {
             if(gamepad1.triangle) {
                 shooterDrive.setPower(1);
             }
-            else if(gamepad1.x){
+            else if(gamepad1.dpad_left){
                 shooterDrive.setPower(-1);
             }else {
                 shooterDrive.setPower(0);
