@@ -119,7 +119,7 @@ public class MainCodeV2 extends LinearOpMode {
         launcherDrive = hardwareMap.get(DcMotorEx.class, "launcher_drive");
         shooterDrive = hardwareMap.get(DcMotorEx.class, "shooter_drive");
 
-        odo.setOffsets(58.0, -167.0); //these are tuned for 3110-0002-0001 Product Insight #1
+        odo.setOffsets(58.0, +167.0); //these are tuned for 3110-0002-0001 Product Insight #1
 
         odo.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
 

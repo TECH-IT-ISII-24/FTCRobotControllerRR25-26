@@ -39,7 +39,7 @@ public final class PinpointLocalizer implements Localizer {
         driver.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
         //driver.setEncoderResolution(19.894);
         //driver.setOffsets(mmPerTick * PARAMS.parYTicks, mmPerTick * PARAMS.perpXTicks);
-        driver.setOffsets(+60, +175);
+        driver.setOffsets(-60, +175);
         //Y: 0.0129404079
         //X: 0.0044942734
 
