@@ -24,13 +24,9 @@ public final class AutoOPTesting extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-
-
-
         waitForStart();
 
-
-        Pose2d beginPose = new Pose2d(48, -63, Math.PI/2);
+        Pose2d beginPose = new Pose2d(-48, -63, Math.PI/2);
         sleep(3000);
 
         MecanumDrive drive = new MecanumDrive(hardwareMap, beginPose);
