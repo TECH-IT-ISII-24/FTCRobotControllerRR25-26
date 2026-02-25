@@ -27,6 +27,8 @@ public class AutoOPBlue extends LinearOpMode {
         // TO DO: CAMBIARE LA CONFIGURAZIONE DEL ROBOT PER LA RAMPDRIVE
         // TO DO: CAMBIARE LA CONFIGURAZIONE DEL ROBOT PER LA RAMPDRIVE
 
+        //TODO: Spostare il mapping dei motori in MecanumDrive per unificarli
+
         rampDrive = hardwareMap.get(DcMotorEx.class, "ramp_drive");
         shooterDrive = hardwareMap.get(DcMotorEx.class, "shooter_drive");
 
@@ -34,45 +36,39 @@ public class AutoOPBlue extends LinearOpMode {
         shooterDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rampDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        Pose2d beginPose = new Pose2d(63, 24, Math.PI);
-        MecanumDrive drive = new MecanumDrive(hardwareMap, beginPose);
+        //Pose2d beginPose = new Pose2d(63, 24, Math.PI);
+        //MecanumDrive drive = new MecanumDrive(hardwareMap, beginPose);
+        Pose2d beginPose = null;
+        MecanumDrive drive = null;
 
         waitForStart();
 
         int obelisk = 2;
+        boolean isTeamBlue = true;
+        boolean isBeginPoseBottom = true;
         
         /* TO DO: LEGGERE OBELISK */
-
-        switch(obelisk) {
-            case 2:
-                Actions.runBlocking(
-                      drive.actionBuilder(beginPose)
-                              // move to ball point
-                              //.stopAndAdd(setLauncher(1.0))
-                              .setTangent(Math.PI / 2)
-                              .strafeToLinearHeading(FixedVector(35, 24), -Math.PI / 2)
-
-                              // load ball
-                              .stopAndAdd(setRamp(1.0))
-                              .strafeToLinearHeading(FixedVector(35, 63), -Math.PI / 2)
-                              .stopAndAdd(setRamp(0))
-
-                              // move to goal
-                              .setTangent(-Math.PI / 2)
-                              .afterTime(0, setShooter(1.0))
-                              .splineToLinearHeading(FixedPose(-24, -24, (5.0 / 4.0) * Math.PI), Math.PI)
-
-                              // shoot ball
-                              .stopAndAdd(setRamp(1.0))
-                              .waitSeconds(2.0)
-
-                              // turn off all
-                              .stopAndAdd(setRamp(0))
-                              .stopAndAdd(setShooter(0))
-                              .build()
-                );
-                break;
+        if(isTeamBlue){
+            if(isBeginPoseBottom){
+                beginPose = new Pose2d(63, 24, Math.PI);
+                BlueBottom(beginPose, new MecanumDrive(hardwareMap, beginPose));
+            }
+            else{
+                beginPose = new Pose2d(-63, 39, Math.PI/2);
+                BlueTop(beginPose ,new MecanumDrive(hardwareMap, beginPose));
+            }
         }
+        else{
+            if(isBeginPoseBottom){
+                beginPose = new Pose2d(63, -39, Math.PI);
+                RedBottom(beginPose, new MecanumDrive(hardwareMap, beginPose));
+            }
+            else{
+                beginPose = new Pose2d(-63, -39, Math.PI);
+                RedTop(beginPose, new MecanumDrive(hardwareMap, beginPose));
+            }
+        }
+
     }
 
     public Vector2d FixedVector (double x,double y){
@@ -103,4 +99,118 @@ public class AutoOPBlue extends LinearOpMode {
             return false;
         };
     }
+
+    public void BlueBottom(Pose2d beginPose, MecanumDrive drive){
+        Actions.runBlocking(
+                drive.actionBuilder(beginPose)
+                        // move to ball point
+                        //.stopAndAdd(setLauncher(1.0))
+                        .setTangent(Math.PI / 2)
+                        .strafeToLinearHeading(FixedVector(35, 24), -Math.PI / 2)
+
+                        // load ball
+                        .stopAndAdd(setRamp(1.0))
+                        .strafeToLinearHeading(FixedVector(35, 63), -Math.PI / 2)
+                        .stopAndAdd(setRamp(0))
+
+                        // move to goal
+                        .setTangent(-Math.PI / 2)
+                        .afterTime(0, setShooter(1.0))
+                        .splineToLinearHeading(FixedPose(-24, -24, (5.0 / 4.0) * Math.PI), Math.PI)
+
+                        // shoot ball
+                        .stopAndAdd(setRamp(1.0))
+                        .waitSeconds(2.0)
+
+                        // turn off all
+                        .stopAndAdd(setRamp(0))
+                        .stopAndAdd(setShooter(0))
+                        .build()
+        );
+    }
+
+    public void BlueTop(Pose2d beginPose, MecanumDrive drive){
+        Actions.runBlocking(
+                drive.actionBuilder(beginPose)
+                        // move to ball point
+                        //.stopAndAdd(setLauncher(1.0))
+                        .setTangent(-Math.PI / 2)
+                        .splineToLinearHeading(FixedPose(35, 24,Math.PI/2) , Math.PI/2)
+
+                        // load ball
+                        .stopAndAdd(setRamp(1.0))
+                        .strafeToLinearHeading(FixedVector(35, 63), -Math.PI / 2)
+                        .stopAndAdd(setRamp(0))
+
+                        // move to goal
+                        .setTangent(-Math.PI / 2)
+                        .afterTime(0, setShooter(1.0))
+                        .splineToLinearHeading(FixedPose(-24, -24, (5.0 / 4.0) * Math.PI), Math.PI)
+
+                        // shoot ball
+                        .stopAndAdd(setRamp(1.0))
+                        .waitSeconds(2.0)
+
+                        // turn off all
+                        .stopAndAdd(setRamp(0))
+                        .stopAndAdd(setShooter(0))
+                        .build()
+        );
+    }
+
+    public void RedBottom(Pose2d beginPose, MecanumDrive drive){
+        Actions.runBlocking(
+                drive.actionBuilder(beginPose)
+                    .setTangent(-Math.PI / 2)
+                    .strafeToLinearHeading(new Vector2d(35, -24) , -Math.PI/2)
+
+                    // load ball
+                    .stopAndAdd(setRamp(1.0))
+                    .strafeToLinearHeading(new Vector2d(35, -63), -Math.PI / 2)
+                    .stopAndAdd(setRamp(0))
+
+                    // move to goal
+                    .setTangent(Math.PI / 2)
+                    .afterTime(0, setShooter(1.0))
+
+                    .splineToLinearHeading(new Pose2d(-24, 24, -(5.0 / 4.0) * Math.PI), Math.PI)
+
+                    // shoot ball
+                    .stopAndAdd(setRamp(1.0))
+                    .waitSeconds(2.0)
+
+                    // turn off all
+                    .stopAndAdd(setRamp(0))
+                    .stopAndAdd(setShooter(0))
+                    .build());
+    }
+
+    public void RedTop(Pose2d beginPose, MecanumDrive drive){
+        Actions.runBlocking(
+                drive.actionBuilder(beginPose)
+                    .setTangent(0)
+                    .splineToLinearHeading(new Pose2d(35, -24, -Math.PI/2) , -Math.PI/2)
+
+                    // load ball
+                    //.stopAndAdd(setRamp(1.0))
+                    .strafeToLinearHeading(new Vector2d(35, -63), -Math.PI / 2)
+                    //.stopAndAdd(setRamp(0))
+
+                    // move to goal
+                    .setTangent(Math.PI / 2)
+                    //.afterTime(0, setShooter(1.0))
+
+                    .splineToLinearHeading(new Pose2d(-24, 24, -(5.0 / 4.0) * Math.PI), Math.PI)
+
+                    // shoot ball
+                    //.stopAndAdd(setRamp(1.0))
+                    .waitSeconds(2.0)
+
+                    // turn off all
+                    //.stopAndAdd(setRamp(0))
+                    //.stopAndAdd(setShooter(0))
+                    .build());
+    }
+
+
 }

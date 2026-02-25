@@ -15,17 +15,29 @@ public class MeepMeepTesting {
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
                 .build();
 
-        myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(63, 24, Math.PI))
-                        .setTangent(Math.PI/ 2)
-                .strafeToLinearHeading(new Vector2d(35, 24) , Math.PI / 2)
-                .strafeToLinearHeading(new Vector2d(35, 63), Math.PI / 2)
-                        .setTangent(-Math.PI / 2)
-                .splineToLinearHeading(new Pose2d(-24, -24, ((double) 5 / 4) * Math.PI), Math.PI)
-                //.splineToLinearHeading(new Pose2d(24, 48, -Math.PI/2), Math.PI)
-                        //.strafeToLinearHeading(new Vector2d(-35, -36), - Math.PI)
-                //.strafeToLinearHeading(new Vector2d(-24, 4), 3 * Math.PI / 4)
-                //.splineTo(new Vector2d(0, 60), Math.PI)
-                .build());
+        myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(-63, -24, -Math.PI/2))
+                        .setTangent(0)
+                        .splineToLinearHeading(new Pose2d(35, -24, -Math.PI/2) , -Math.PI/2)
+
+                        // load ball
+                        //.stopAndAdd(setRamp(1.0))
+                        .strafeToLinearHeading(new Vector2d(35, -63), -Math.PI / 2)
+                        //.stopAndAdd(setRamp(0))
+
+                        // move to goal
+                        .setTangent(Math.PI / 2)
+                        //.afterTime(0, setShooter(1.0))
+
+                        .splineToLinearHeading(new Pose2d(-24, 24, -(5.0 / 4.0) * Math.PI), Math.PI)
+
+                        // shoot ball
+                        //.stopAndAdd(setRamp(1.0))
+                        .waitSeconds(2.0)
+
+                        // turn off all
+                        //.stopAndAdd(setRamp(0))
+                        //.stopAndAdd(setShooter(0))
+                        .build());
 
         meepMeep.setBackground(MeepMeep.Background.FIELD_DECODE_OFFICIAL)
                 .setDarkMode(true)
