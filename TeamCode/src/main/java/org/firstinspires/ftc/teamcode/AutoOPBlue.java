@@ -162,18 +162,18 @@ public class AutoOPBlue extends LinearOpMode {
         Actions.runBlocking(
                 drive.actionBuilder(beginPose)
                     .setTangent(-Math.PI / 2)
-                    .strafeToLinearHeading(new Vector2d(35, -24) , -Math.PI/2)
+                    .strafeToLinearHeading(FixedVector(35, -24) , -Math.PI/2)
 
                     // load ball
                     .stopAndAdd(setRamp(1.0))
-                    .strafeToLinearHeading(new Vector2d(35, -63), -Math.PI / 2)
+                    .strafeToLinearHeading(FixedVector(35, -63), -Math.PI / 2)
                     .stopAndAdd(setRamp(0))
 
                     // move to goal
                     .setTangent(Math.PI / 2)
                     .afterTime(0, setShooter(1.0))
 
-                    .splineToLinearHeading(new Pose2d(-24, 24, -(5.0 / 4.0) * Math.PI), Math.PI)
+                    .splineToLinearHeading(FixedPose(-24, 24, -(5.0 / 4.0) * Math.PI), Math.PI)
 
                     // shoot ball
                     .stopAndAdd(setRamp(1.0))
@@ -189,26 +189,26 @@ public class AutoOPBlue extends LinearOpMode {
         Actions.runBlocking(
                 drive.actionBuilder(beginPose)
                     .setTangent(0)
-                    .splineToLinearHeading(new Pose2d(35, -24, -Math.PI/2) , -Math.PI/2)
+                    .splineToLinearHeading(FixedPose(35, -24, -Math.PI/2) , -Math.PI/2)
 
                     // load ball
-                    //.stopAndAdd(setRamp(1.0))
-                    .strafeToLinearHeading(new Vector2d(35, -63), -Math.PI / 2)
-                    //.stopAndAdd(setRamp(0))
+                    .stopAndAdd(setRamp(1.0))
+                    .strafeToLinearHeading(FixedVector(35, -63), -Math.PI / 2)
+                    .stopAndAdd(setRamp(0))
 
                     // move to goal
                     .setTangent(Math.PI / 2)
-                    //.afterTime(0, setShooter(1.0))
+                    .afterTime(0, setShooter(1.0))
 
-                    .splineToLinearHeading(new Pose2d(-24, 24, -(5.0 / 4.0) * Math.PI), Math.PI)
+                    .splineToLinearHeading(FixedPose(-24, 24, -(5.0 / 4.0) * Math.PI), Math.PI)
 
                     // shoot ball
-                    //.stopAndAdd(setRamp(1.0))
+                    .stopAndAdd(setRamp(1.0))
                     .waitSeconds(2.0)
 
                     // turn off all
-                    //.stopAndAdd(setRamp(0))
-                    //.stopAndAdd(setShooter(0))
+                    .stopAndAdd(setRamp(0))
+                    .stopAndAdd(setShooter(0))
                     .build());
     }
 
