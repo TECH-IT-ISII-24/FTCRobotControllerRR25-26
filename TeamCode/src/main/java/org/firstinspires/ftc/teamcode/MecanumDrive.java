@@ -109,6 +109,8 @@ public final class MecanumDrive {
 
     public final DcMotorEx leftFront, leftBack, rightBack, rightFront;
 
+    public DcMotorEx rampDrive, shooterDrive;
+
     public final VoltageSensor voltageSensor;
 
     public final LazyImu lazyImu;
@@ -230,11 +232,18 @@ public final class MecanumDrive {
         leftBack = hardwareMap.get(DcMotorEx.class, "left_back_drive");
         rightBack = hardwareMap.get(DcMotorEx.class, "right_back_drive");
         rightFront = hardwareMap.get(DcMotorEx.class, "right_front_drive");
+        rampDrive = hardwareMap.get(DcMotorEx.class, "ramp_drive");
+        shooterDrive = hardwareMap.get(DcMotorEx.class, "shooter_drive");
+
 
         leftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        shooterDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        shooterDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rampDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         // TODO: reverse motor directions if needed
         //   leftFront.setDirection(DcMotorSimple.Direction.REVERSE);

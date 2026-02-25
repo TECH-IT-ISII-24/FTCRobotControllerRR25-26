@@ -5,14 +5,11 @@ import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.acmerobotics.roadrunner.Action;
 
 @Autonomous(name="AutoOPBlue", group="autonomous")
 public class AutoOPBlue extends LinearOpMode {
-    private DcMotorEx rampDrive = null;
-    private DcMotorEx shooterDrive = null;
 
     @Override
     public void runOpMode() {
@@ -27,25 +24,41 @@ public class AutoOPBlue extends LinearOpMode {
         // TO DO: CAMBIARE LA CONFIGURAZIONE DEL ROBOT PER LA RAMPDRIVE
         // TO DO: CAMBIARE LA CONFIGURAZIONE DEL ROBOT PER LA RAMPDRIVE
 
-        //TODO: Spostare il mapping dei motori in MecanumDrive per unificarli
 
-        rampDrive = hardwareMap.get(DcMotorEx.class, "ramp_drive");
-        shooterDrive = hardwareMap.get(DcMotorEx.class, "shooter_drive");
-
-        shooterDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        shooterDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rampDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-        //Pose2d beginPose = new Pose2d(63, 24, Math.PI);
-        //MecanumDrive drive = new MecanumDrive(hardwareMap, beginPose);
-        Pose2d beginPose = null;
+        Pose2d beginPose;
         MecanumDrive drive = null;
-
-        waitForStart();
-
         int obelisk = 2;
         boolean isTeamBlue = true;
         boolean isBeginPoseBottom = true;
+        boolean found = false;
+
+        //Leggi informazioni da controller per posizione iniziale e team.
+        do{
+            if(gamepad1.dpad_down){
+                isBeginPoseBottom = true;
+            }
+            if(gamepad1.dpad_up){
+                isBeginPoseBottom = false;
+
+            }
+            if(gamepad1.right_bumper){
+                isTeamBlue = true;
+            }
+            if(gamepad1.left_bumper){
+                isTeamBlue = false;
+            }
+            if(gamepad1.b){
+                found = true;
+            }
+
+            telemetry.addData("Position: ", (isBeginPoseBottom) ? "Top" : "Bottom" );
+            telemetry.addData("Team: ", (isTeamBlue) ? "Blue" : "Red" );
+            telemetry.update();
+
+        }while(!found);
+
+        waitForStart();
+
         
         /* TO DO: LEGGERE OBELISK */
         if(isTeamBlue){
@@ -86,21 +99,16 @@ public class AutoOPBlue extends LinearOpMode {
 
     }
 
-    public Action setRamp(double power) {
+    public Action setDrive(DcMotorEx motor, double power) {
         return packet -> {
-            rampDrive.setPower(power);
-            return false;
-        };
-    }
-    
-    public Action setShooter(double power) {
-        return packet -> {
-            shooterDrive.setPower(power);
+            motor.setPower(power);
             return false;
         };
     }
 
     public void BlueBottom(Pose2d beginPose, MecanumDrive drive){
+        DcMotorEx rampDrive = drive.rampDrive;
+        DcMotorEx shooterDrive = drive.shooterDrive;
         Actions.runBlocking(
                 drive.actionBuilder(beginPose)
                         // move to ball point
@@ -109,27 +117,30 @@ public class AutoOPBlue extends LinearOpMode {
                         .strafeToLinearHeading(FixedVector(35, 24), -Math.PI / 2)
 
                         // load ball
-                        .stopAndAdd(setRamp(1.0))
+                        .stopAndAdd(setDrive(rampDrive,1.0))
                         .strafeToLinearHeading(FixedVector(35, 63), -Math.PI / 2)
-                        .stopAndAdd(setRamp(0))
+                        .stopAndAdd(setDrive(rampDrive, 0))
 
                         // move to goal
                         .setTangent(-Math.PI / 2)
-                        .afterTime(0, setShooter(1.0))
                         .splineToLinearHeading(FixedPose(-24, -24, (5.0 / 4.0) * Math.PI), Math.PI)
 
                         // shoot ball
-                        .stopAndAdd(setRamp(1.0))
+                        .stopAndAdd(setDrive(shooterDrive, 1.0))
                         .waitSeconds(2.0)
+                        .stopAndAdd((setDrive(rampDrive, 1.0 )))
 
                         // turn off all
-                        .stopAndAdd(setRamp(0))
-                        .stopAndAdd(setShooter(0))
+                        .waitSeconds(2.0)
+                        .stopAndAdd(setDrive(shooterDrive,0))
+                        .stopAndAdd(setDrive(rampDrive,0))
                         .build()
         );
     }
 
     public void BlueTop(Pose2d beginPose, MecanumDrive drive){
+        DcMotorEx rampDrive = drive.rampDrive;
+        DcMotorEx shooterDrive = drive.shooterDrive;
         Actions.runBlocking(
                 drive.actionBuilder(beginPose)
                         // move to ball point
@@ -138,79 +149,86 @@ public class AutoOPBlue extends LinearOpMode {
                         .splineToLinearHeading(FixedPose(35, 24,Math.PI/2) , Math.PI/2)
 
                         // load ball
-                        .stopAndAdd(setRamp(1.0))
+                        .stopAndAdd(setDrive(rampDrive,1.0))
                         .strafeToLinearHeading(FixedVector(35, 63), -Math.PI / 2)
-                        .stopAndAdd(setRamp(0))
+                        .stopAndAdd(setDrive(rampDrive,0))
 
                         // move to goal
                         .setTangent(-Math.PI / 2)
-                        .afterTime(0, setShooter(1.0))
                         .splineToLinearHeading(FixedPose(-24, -24, (5.0 / 4.0) * Math.PI), Math.PI)
 
                         // shoot ball
-                        .stopAndAdd(setRamp(1.0))
+                        .stopAndAdd(setDrive(shooterDrive,1.0))
                         .waitSeconds(2.0)
+                        .stopAndAdd(setDrive(rampDrive,1.0))
 
                         // turn off all
-                        .stopAndAdd(setRamp(0))
-                        .stopAndAdd(setShooter(0))
+                        .waitSeconds(2.0)
+                        .stopAndAdd(setDrive(shooterDrive,0))
+                        .stopAndAdd(setDrive(rampDrive,0))
                         .build()
         );
     }
 
     public void RedBottom(Pose2d beginPose, MecanumDrive drive){
+        DcMotorEx rampDrive = drive.rampDrive;
+        DcMotorEx shooterDrive = drive.shooterDrive;
         Actions.runBlocking(
                 drive.actionBuilder(beginPose)
                     .setTangent(-Math.PI / 2)
                     .strafeToLinearHeading(FixedVector(35, -24) , -Math.PI/2)
 
-                    // load ball
-                    .stopAndAdd(setRamp(1.0))
+                        //load ball
+                    .stopAndAdd(setDrive(rampDrive,1.0))
                     .strafeToLinearHeading(FixedVector(35, -63), -Math.PI / 2)
-                    .stopAndAdd(setRamp(0))
+                        .stopAndAdd(setDrive(rampDrive,0))
 
                     // move to goal
                     .setTangent(Math.PI / 2)
-                    .afterTime(0, setShooter(1.0))
+
 
                     .splineToLinearHeading(FixedPose(-24, 24, -(5.0 / 4.0) * Math.PI), Math.PI)
 
                     // shoot ball
-                    .stopAndAdd(setRamp(1.0))
+                    .stopAndAdd(setDrive(shooterDrive,1.0))
                     .waitSeconds(2.0)
+                        .afterTime(0, setDrive(rampDrive,1.0))
 
                     // turn off all
-                    .stopAndAdd(setRamp(0))
-                    .stopAndAdd(setShooter(0))
+                        .waitSeconds(2.0)
+                        .stopAndAdd(setDrive(shooterDrive,0))
+                        .afterTime(0, setDrive(rampDrive,0))
                     .build());
     }
 
     public void RedTop(Pose2d beginPose, MecanumDrive drive){
+        DcMotorEx rampDrive = drive.rampDrive;
+        DcMotorEx shooterDrive = drive.shooterDrive;
         Actions.runBlocking(
                 drive.actionBuilder(beginPose)
                     .setTangent(0)
                     .splineToLinearHeading(FixedPose(35, -24, -Math.PI/2) , -Math.PI/2)
 
                     // load ball
-                    .stopAndAdd(setRamp(1.0))
+                    .stopAndAdd(setDrive(rampDrive,1.0))
                     .strafeToLinearHeading(FixedVector(35, -63), -Math.PI / 2)
-                    .stopAndAdd(setRamp(0))
+                    .stopAndAdd(setDrive(rampDrive,0))
 
                     // move to goal
                     .setTangent(Math.PI / 2)
-                    .afterTime(0, setShooter(1.0))
+
 
                     .splineToLinearHeading(FixedPose(-24, 24, -(5.0 / 4.0) * Math.PI), Math.PI)
 
                     // shoot ball
-                    .stopAndAdd(setRamp(1.0))
+                    .stopAndAdd(setDrive(shooterDrive,1.0))
                     .waitSeconds(2.0)
+                        .afterTime(0, setDrive(rampDrive, 1.0))
 
                     // turn off all
-                    .stopAndAdd(setRamp(0))
-                    .stopAndAdd(setShooter(0))
+                        .waitSeconds(2.0)
+                    .stopAndAdd(setDrive(shooterDrive,0))
+                    .stopAndAdd(setDrive(rampDrive, 0))
                     .build());
     }
-
-
 }
