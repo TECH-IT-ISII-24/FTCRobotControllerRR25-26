@@ -59,6 +59,8 @@ public class AutoOPBlue extends LinearOpMode {
 
         waitForStart();
 
+
+
         
         /* TO DO: LEGGERE OBELISK */
         if(isTeamBlue){
@@ -73,7 +75,7 @@ public class AutoOPBlue extends LinearOpMode {
         }
         else{
             if(isBeginPoseBottom){
-                beginPose = new Pose2d(63, -39, Math.PI);
+                beginPose = new Pose2d(63, -24, Math.PI);
                 RedBottom(beginPose, new MecanumDrive(hardwareMap, beginPose));
             }
             else{
