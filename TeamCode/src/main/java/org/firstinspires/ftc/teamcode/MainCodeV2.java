@@ -73,7 +73,7 @@ public class MainCodeV2 extends LinearOpMode {
         leftBackDrive = hardwareMap.get(DcMotorEx.class, "left_back_drive");
         rightBackDrive = hardwareMap.get(DcMotorEx.class, "right_back_drive");
         rightFrontDrive = hardwareMap.get(DcMotorEx.class, "right_front_drive");
-        launcherDrive = hardwareMap.get(DcMotorEx.class, "launcher_drive");
+        launcherDrive = hardwareMap.get(DcMotorEx.class, "ramp_drive");
         shooterDrive = hardwareMap.get(DcMotorEx.class, "shooter_drive");
 
         odo.setOffsets(-60, +175.0); //these are tuned for 3110-0002-0001 Product Insight #1

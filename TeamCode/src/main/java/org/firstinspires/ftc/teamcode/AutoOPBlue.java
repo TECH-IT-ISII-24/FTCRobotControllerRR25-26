@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.acmerobotics.roadrunner.AngularVelConstraint;
 import com.acmerobotics.roadrunner.Pose2d;
+import com.acmerobotics.roadrunner.ProfileAccelConstraint;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -88,8 +90,8 @@ public class AutoOPBlue extends LinearOpMode {
 
     public Vector2d FixedVector (double x,double y){
 
-        double newx = (x >= 0) ? x - 4 : x + 4;
-        double newy = (y >= 0) ? y - 4 : y + 4;
+        double newx = (x >= 0) ? x - 0 : x + 0;
+        double newy = (y >= 0) ? y - 0 : y + 0;
         return new Vector2d(newx, newy);
 
     }
@@ -116,11 +118,11 @@ public class AutoOPBlue extends LinearOpMode {
                         // move to ball point
                         //.stopAndAdd(setLauncher(1.0))
                         .setTangent(Math.PI / 2)
-                        .strafeToLinearHeading(FixedVector(35, 24), -Math.PI / 2)
+                        .strafeToLinearHeading(FixedVector(39, 24), -Math.PI / 2)
 
                         // load ball
                         .stopAndAdd(setDrive(rampDrive,1.0))
-                        .strafeToLinearHeading(FixedVector(35, 63), -Math.PI / 2)
+                        .strafeToLinearHeading(FixedVector(39, 63), -Math.PI / 2, null, new ProfileAccelConstraint(-25, 30))
                         //TODO potremmo usare azioni parallele..
                         //Principalmente nello spinup del launcher mentre ci spostiamo in posizione
                         //Le posizioni di lancio potrebbero cambiare in base a come è
@@ -130,15 +132,14 @@ public class AutoOPBlue extends LinearOpMode {
 
                         // move to goal
                         .setTangent(-Math.PI / 2)
+                        .stopAndAdd(setDrive(shooterDrive, 1.0))
                         .splineToLinearHeading(FixedPose(-24, -24, (5.0 / 4.0) * Math.PI), Math.PI)
 
                         // shoot ball
-                        .stopAndAdd(setDrive(shooterDrive, 1.0))
-                        .waitSeconds(2.0)
                         .stopAndAdd((setDrive(rampDrive, 1.0 )))
 
                         // turn off all
-                        .waitSeconds(2.0)
+                        .waitSeconds(5.0)
                         .stopAndAdd(setDrive(shooterDrive,0))
                         .stopAndAdd(setDrive(rampDrive,0))
                         .build()
