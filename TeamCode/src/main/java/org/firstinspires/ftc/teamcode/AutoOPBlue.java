@@ -121,6 +121,11 @@ public class AutoOPBlue extends LinearOpMode {
                         // load ball
                         .stopAndAdd(setDrive(rampDrive,1.0))
                         .strafeToLinearHeading(FixedVector(35, 63), -Math.PI / 2)
+                        //TODO potremmo usare azioni parallele..
+                        //Principalmente nello spinup del launcher mentre ci spostiamo in posizione
+                        //Le posizioni di lancio potrebbero cambiare in base a come è
+                        //configurata la rampa.
+
                         .stopAndAdd(setDrive(rampDrive, 0))
 
                         // move to goal
