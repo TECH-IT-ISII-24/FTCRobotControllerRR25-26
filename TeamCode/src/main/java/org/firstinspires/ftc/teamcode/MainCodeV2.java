@@ -102,7 +102,7 @@ public class MainCodeV2 extends LinearOpMode {
 
         while (opModeIsActive()) {
 
-            odo.update();
+            //odo.update();
             double max;
 
             double axial   =  -gamepad1.left_stick_y;
@@ -145,7 +145,8 @@ public class MainCodeV2 extends LinearOpMode {
             }
             else if(gamepad1.right_bumper){
                 shooterDrive.setPower(-1);
-            }else {
+            }
+            else {
                 shooterDrive.setPower(0);
             }
 
@@ -153,19 +154,21 @@ public class MainCodeV2 extends LinearOpMode {
                 odo.resetPosAndIMU();
             }
 
-            Pose2D pos = odo.getPosition();
-            String data = String.format(Locale.US, "{X: %.3f, Y: %.3f, H: %.3f}", pos.getX(DistanceUnit.MM), pos.getY(DistanceUnit.MM), pos.getHeading(AngleUnit.DEGREES));
-            telemetry.addData("Position", data);
 
-            String velocity = String.format(Locale.US,"{XVel: %.3f, YVel: %.3f, HVel: %.3f}", odo.getVelX(), odo.getVelY(), odo.getHeadingVelocity());
-            telemetry.addData("Velocity", velocity);
 
-            telemetry.addData("Status", odo.getDeviceStatus());
+            //Pose2D pos = odo.getPosition();
+            //String data = String.format(Locale.US, "{X: %.3f, Y: %.3f, H: %.3f}", pos.getX(DistanceUnit.MM), pos.getY(DistanceUnit.MM), pos.getHeading(AngleUnit.DEGREES));
+            //telemetry.addData("Position", data);
 
-            telemetry.addData("Pinpoint Frequency", odo.getFrequency()); //prints/gets the current refresh rate of the Pinpoint
+            //String velocity = String.format(Locale.US,"{XVel: %.3f, YVel: %.3f, HVel: %.3f}", odo.getVelX(), odo.getVelY(), odo.getHeadingVelocity());
+            //telemetry.addData("Velocity", velocity);
+
+            //telemetry.addData("Status", odo.getDeviceStatus());
+
+            //telemetry.addData("Pinpoint Frequency", odo.getFrequency()); //prints/gets the current refresh rate of the Pinpoint
 
             // Show the elapsed game time and wheel power.
-            telemetry.addData("Status", "Run Time: " + runtime.toString());
+            //telemetry.addData("Status", "Run Time: " + runtime.toString());
             telemetry.addData("Front left/Right", "%4.2f, %4.2f", leftFrontPower, rightFrontPower);
             telemetry.addData("Back  left/Right", "%4.2f, %4.2f", leftBackPower, rightBackPower);
             telemetry.update();

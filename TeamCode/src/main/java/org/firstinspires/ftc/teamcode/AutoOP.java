@@ -133,7 +133,7 @@ public class AutoOP extends LinearOpMode {
                         // move to goal
                         .setTangent(-Math.PI / 2)
                         .stopAndAdd(setDrive(shooterDrive, 1.0))
-                        .splineToLinearHeading(FixedPose(-24, -24, (5.0 / 4.0) * Math.PI), Math.PI)
+                        .splineToLinearHeading(FixedPose(-6, -6, (5.0 / 4.0) * Math.PI), Math.PI)
 
                         // shoot ball
                         .stopAndAdd((setDrive(rampDrive, 1.0 )))
@@ -164,7 +164,7 @@ public class AutoOP extends LinearOpMode {
                         // move to goal
                         .setTangent(-Math.PI / 2)
                         .stopAndAdd(setDrive(shooterDrive, 1.0))
-                        .splineToLinearHeading(FixedPose(24, -24, (5.0 / 4.0) * Math.PI), Math.PI)
+                        .splineToLinearHeading(FixedPose(6, -6, (5.0 / 4.0) * Math.PI), Math.PI)
 
                         // shoot ball
                         .stopAndAdd((setDrive(rampDrive, 1.0 )))
@@ -184,18 +184,20 @@ public class AutoOP extends LinearOpMode {
                 drive.actionBuilder(beginPose)
                     .setTangent(-Math.PI / 1.5)
                     //.strafeToLinearHeading(FixedVector(35, -24) , Math.PI/2)
-                    .splineToLinearHeading(FixedPose(35, -24, Math.PI/2) , -Math.PI / 2)
-
-                        //load ball
-                    .stopAndAdd(setDrive(rampDrive,1.0))
-                    .strafeToLinearHeading(FixedVector(35, -63), Math.PI / 2, null, new ProfileAccelConstraint(-20, 25))
-                        .stopAndAdd(setDrive(rampDrive,0))
-
-
-                    // move to goal
-                    .setTangent(Math.PI / 2)
+//                    .strafeTo(FixedVector(57, -24))
+//                    .splineToLinearHeading(FixedPose(35, -24, Math.PI/2) , -Math.PI / 2)
+//
+//                        //load ball
+//                    .stopAndAdd(setDrive(rampDrive,1.0))
+//                    .strafeToLinearHeading(FixedVector(35, -63), Math.PI / 2, null, new ProfileAccelConstraint(-20, 25))
+//                        .stopAndAdd(setDrive(rampDrive,0))
+//
+//
+//                    // move to goal
+//                    .setTangent(Math.PI / 2)
                     .stopAndAdd(setDrive(shooterDrive, 1.0))
-                    .splineToLinearHeading(FixedPose(-24, 24, (5.0 / 4.0) * -Math.PI), Math.PI)
+                        .waitSeconds(1)
+                    .splineToLinearHeading(FixedPose(-8, 4, (6.0 / 5.0) * -Math.PI), Math.PI)
 
                     // shoot ball
                     .stopAndAdd((setDrive(rampDrive, 1.0 )))
@@ -224,7 +226,7 @@ public class AutoOP extends LinearOpMode {
                         // move to goal
                         .setTangent(Math.PI / 2)
                         .stopAndAdd(setDrive(shooterDrive, 1.0))
-                        .splineToLinearHeading(FixedPose(-24, 24, (5.0 / 4.0) * -Math.PI), Math.PI)
+                        .splineToLinearHeading(FixedPose(-6, 6, (5.0 / 4.0) * -Math.PI), Math.PI)
 
                         // shoot ball
                         .stopAndAdd((setDrive(rampDrive, 1.0 )))
