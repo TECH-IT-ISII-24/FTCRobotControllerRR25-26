@@ -149,6 +149,10 @@ public class MainCodeV2 extends LinearOpMode {
                 shooterDrive.setPower(0);
             }
 
+            if(gamepad1.b) {
+                odo.resetPosAndIMU();
+            }
+
             Pose2D pos = odo.getPosition();
             String data = String.format(Locale.US, "{X: %.3f, Y: %.3f, H: %.3f}", pos.getX(DistanceUnit.MM), pos.getY(DistanceUnit.MM), pos.getHeading(AngleUnit.DEGREES));
             telemetry.addData("Position", data);

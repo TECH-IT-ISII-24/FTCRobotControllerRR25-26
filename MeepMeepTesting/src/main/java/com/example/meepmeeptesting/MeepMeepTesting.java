@@ -15,34 +15,52 @@ public class MeepMeepTesting {
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
                 .build();
 
-        myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(-63, -24, -Math.PI/2))
+        myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(-63, 39, -Math.PI/2))
+                        // move to ball point
+                        //.stopAndAdd(setLauncher(1.0))
                         .setTangent(0)
-                        .splineToLinearHeading(new Pose2d(35, -24, -Math.PI/2) , -Math.PI/2)
+                        .splineToLinearHeading(FixedPose(35, 24,-Math.PI/2) , Math.PI/2)
 
                         // load ball
-                        //.stopAndAdd(setRamp(1.0))
-                        .strafeToLinearHeading(new Vector2d(35, -63), -Math.PI / 2)
-                        //.stopAndAdd(setRamp(0))
+                        //.stopAndAdd(setDrive(rampDrive,1.0))
+                        .strafeToLinearHeading(FixedVector(35, 63), -Math.PI / 2)
+                        //.stopAndAdd(setDrive(rampDrive,0))
 
                         // move to goal
-                        .setTangent(Math.PI / 2)
-                        //.afterTime(0, setShooter(1.0))
-
-                        .splineToLinearHeading(new Pose2d(-24, 24, -(5.0 / 4.0) * Math.PI), Math.PI)
+                        .setTangent(-Math.PI / 2)
+                        .splineToLinearHeading(FixedPose(-24, -24, (5.0 / 4.0) * Math.PI), Math.PI)
 
                         // shoot ball
-                        //.stopAndAdd(setRamp(1.0))
+                        //.stopAndAdd(setDrive(shooterDrive,1.0))
                         .waitSeconds(2.0)
+                        //.stopAndAdd(setDrive(rampDrive,1.0))
 
                         // turn off all
-                        //.stopAndAdd(setRamp(0))
-                        //.stopAndAdd(setShooter(0))
-                        .build());
+                        .waitSeconds(2.0)
+                        //.stopAndAdd(setDrive(shooterDrive,0))
+                        //.stopAndAdd(setDrive(rampDrive,0))
+                        .build()
+        );
 
         meepMeep.setBackground(MeepMeep.Background.FIELD_DECODE_OFFICIAL)
                 .setDarkMode(true)
                 .setBackgroundAlpha(0.95f)
                 .addEntity(myBot)
                 .start();
+    }
+
+    public static Vector2d FixedVector(double x, double y){
+
+        double newx = (x >= 0) ? x - 0 : x + 0;
+        double newy = (y >= 0) ? y - 0 : y + 0;
+        return new Vector2d(newx, newy);
+
+    }
+    public static Pose2d FixedPose(double x, double y, double heading){
+
+        double newx = (x >= 0) ? x - 0 : x + 0;
+        double newy = (y >= 0) ? y - 0 : y + 0;
+        return new Pose2d(newx, newy, heading);
+
     }
 }
