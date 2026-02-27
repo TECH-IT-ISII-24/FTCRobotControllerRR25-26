@@ -4,6 +4,7 @@ import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.ProfileAccelConstraint;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
+import com.qualcomm.hardware.dfrobot.HuskyLens;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -11,20 +12,14 @@ import com.acmerobotics.roadrunner.Action;
 
 @Autonomous(name="AutoOP", group="autonomous")
 public class AutoOP extends LinearOpMode {
+    private HuskyLens huskyLens;
 
     @Override
     public void runOpMode() {
-        // TO DO: CAMBIARE LA CONFIGURAZIONE DEL ROBOT PER LA RAMPDRIVE
-        // TO DO: CAMBIARE LA CONFIGURAZIONE DEL ROBOT PER LA RAMPDRIVE
-        // TO DO: CAMBIARE LA CONFIGURAZIONE DEL ROBOT PER LA RAMPDRIVE
-        // TO DO: CAMBIARE LA CONFIGURAZIONE DEL ROBOT PER LA RAMPDRIVE
-        // TO DO: CAMBIARE LA CONFIGURAZIONE DEL ROBOT PER LA RAMPDRIVE
-        // TO DO: CAMBIARE LA CONFIGURAZIONE DEL ROBOT PER LA RAMPDRIVE
-        // TO DO: CAMBIARE LA CONFIGURAZIONE DEL ROBOT PER LA RAMPDRIVE
-        // TO DO: CAMBIARE LA CONFIGURAZIONE DEL ROBOT PER LA RAMPDRIVE
-        // TO DO: CAMBIARE LA CONFIGURAZIONE DEL ROBOT PER LA RAMPDRIVE
-        // TO DO: CAMBIARE LA CONFIGURAZIONE DEL ROBOT PER LA RAMPDRIVE
+        huskyLens = hardwareMap.get(HuskyLens.class, "huskylens");
 
+        if(!huskyLens.knock()) telemetry.addData("Errore", "HuskyLens");
+        huskyLens.selectAlgorithm(HuskyLens.Algorithm.TAG_RECOGNITION);
 
         Pose2d beginPose;
         MecanumDrive drive = null;
@@ -68,6 +63,20 @@ public class AutoOP extends LinearOpMode {
         if(isTeamBlue){
             if(isBeginPoseBottom){
                 beginPose = new Pose2d(63, 24, Math.PI);
+
+                HuskyLens.Block[] blocks = huskyLens.blocks();
+
+                while(blocks.length != 1) {
+                    // TODO: muoviu il robot
+
+                    blocks = huskyLens.blocks();
+                }
+
+                for (int i = 0; i < blocks.length; i++) {
+                    HuskyLens.Block b = blocks[i];
+
+                }
+
                 BlueBottom(beginPose, new MecanumDrive(hardwareMap, beginPose));
             }
             else{
