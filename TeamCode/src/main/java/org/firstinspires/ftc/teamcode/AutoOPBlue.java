@@ -51,7 +51,7 @@ public class AutoOPBlue extends LinearOpMode {
                 found = true;
             }
 
-            telemetry.addData("Position: ", (isBeginPoseBottom) ? "Top" : "Bottom" );
+            telemetry.addData("Position: ", (isBeginPoseBottom) ? "Bottom" : "Top" );
             telemetry.addData("Team: ", (isTeamBlue) ? "Blue" : "Red" );
             telemetry.update();
 
@@ -95,8 +95,8 @@ public class AutoOPBlue extends LinearOpMode {
     }
     public Pose2d FixedPose (double x,double y, double heading){
 
-        double newx = (x >= 0) ? x - 4 : x + 4;
-        double newy = (y >= 0) ? y - 4 : y + 4;
+        double newx = (x >= 0) ? x - 0 : x + 0;
+        double newy = (y >= 0) ? y - 0 : y + 0;
         return new Pose2d(newx, newy, heading);
 
     }
