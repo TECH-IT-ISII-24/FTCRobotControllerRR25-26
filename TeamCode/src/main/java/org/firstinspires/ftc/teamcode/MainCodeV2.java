@@ -58,6 +58,7 @@ public class MainCodeV2 extends LinearOpMode {
 
     private DcMotorEx launcherDrive = null;
     private DcMotorEx shooterDrive = null;
+    private double shooterPower = 1;
 
     private GoBildaPinpointDriver odo = null;
     private ElapsedTime runtime = new ElapsedTime();
@@ -141,10 +142,10 @@ public class MainCodeV2 extends LinearOpMode {
             }
 
             if(gamepad1.left_bumper) {
-                shooterDrive.setPower(1);
+                shooterDrive.setPower(shooterPower);
             }
             else if(gamepad1.right_bumper){
-                shooterDrive.setPower(-1);
+                shooterDrive.setPower(-shooterPower);
             }
             else {
                 shooterDrive.setPower(0);
@@ -152,6 +153,13 @@ public class MainCodeV2 extends LinearOpMode {
 
             if(gamepad1.b) {
                 odo.resetPosAndIMU();
+            }
+
+            if(gamepad1.dpad_down){
+                shooterPower -= 0.01;
+            }
+            if(gamepad1.dpad_up){
+                shooterPower += 0.01;
             }
 
 
@@ -171,6 +179,7 @@ public class MainCodeV2 extends LinearOpMode {
             //telemetry.addData("Status", "Run Time: " + runtime.toString());
             telemetry.addData("Front left/Right", "%4.2f, %4.2f", leftFrontPower, rightFrontPower);
             telemetry.addData("Back  left/Right", "%4.2f, %4.2f", leftBackPower, rightBackPower);
+            telemetry.addData("Shooter power ", "%4.2f", shooterPower);
             telemetry.update();
         }
     }}
