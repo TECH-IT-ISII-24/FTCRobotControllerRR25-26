@@ -134,26 +134,33 @@ public class AutoOP extends LinearOpMode {
     public void BlueBottom(Pose2d beginPose, MecanumDrive drive){
         DcMotorEx rampDrive = drive.rampDrive;
         DcMotorEx shooterDrive = drive.shooterDrive;
+
+        obeliskOffset = readObelisk(drive, beginPose);
+        beginPose = new Pose2d(0, 0, Math.PI);
+
         Actions.runBlocking(
                 drive.actionBuilder(beginPose)
                         // move to ball point
                         //.stopAndAdd(setLauncher(1.0))
                         .setTangent(Math.PI / 2)
-                        .strafeToLinearHeading(FixedVector(39, 24), -Math.PI / 2)
+                        .strafeToLinearHeading(FixedVector(32 - obeliskOffset, 24), -Math.PI / 2)
 
                         // load ball
                         .stopAndAdd(setDrive(rampDrive,1.0))
-                        .strafeToLinearHeading(FixedVector(39, 63), -Math.PI / 2, null, new ProfileAccelConstraint(-25, 30))
+                        .strafeToLinearHeading(FixedVector(32 - obeliskOffset, 63), -Math.PI / 2, null, new ProfileAccelConstraint(-25, 30))
                         //TODO potremmo usare azioni parallele..
                         //Principalmente nello spinup del launcher mentre ci spostiamo in posizione
                         //Le posizioni di lancio potrebbero cambiare in base a come è
                         //configurata la rampa.
 
+                        .stopAndAdd(setDrive(rampDrive,0))
+                        .stopAndAdd(setDrive(rampDrive,-0.1))
+                        .waitSeconds(0.5)
                         .stopAndAdd(setDrive(rampDrive, 0))
 
                         // move to goal
                         .setTangent(-Math.PI / 2)
-                        .stopAndAdd(setDrive(shooterDrive, 1.0))
+                        .stopAndAdd(setDrive(shooterDrive, shooterPower))
                         .splineToLinearHeading(FixedPose(-6, -6, (5.0 / 4.0) * Math.PI), Math.PI)
 
                         // shoot ball
@@ -170,21 +177,25 @@ public class AutoOP extends LinearOpMode {
     public void BlueTop(Pose2d beginPose, MecanumDrive drive){
         DcMotorEx rampDrive = drive.rampDrive;
         DcMotorEx shooterDrive = drive.shooterDrive;
+
+        obeliskOffset = readObelisk(drive, beginPose);
+        beginPose = new Pose2d(0, 0, Math.PI);
+
         Actions.runBlocking(
                 drive.actionBuilder(beginPose)
                         // move to ball point
                         //.stopAndAdd(setLauncher(1.0))
                         .setTangent(-Math.PI / 3)
-                        .splineToLinearHeading(FixedPose(35, 24,-Math.PI/2) , Math.PI/2)
+                        .splineToLinearHeading(FixedPose(32 - obeliskOffset, 24,-Math.PI/2) , Math.PI/2)
 
                         // load ball
                         .stopAndAdd(setDrive(rampDrive,1.0))
-                        .strafeToLinearHeading(FixedVector(35, 63), -Math.PI / 2, null, new ProfileAccelConstraint(-20, 20))
+                        .strafeToLinearHeading(FixedVector(32 - obeliskOffset, 63), -Math.PI / 2, null, new ProfileAccelConstraint(-20, 20))
                         .stopAndAdd(setDrive(rampDrive,0))
 
                         // move to goal
                         .setTangent(-Math.PI / 2)
-                        .stopAndAdd(setDrive(shooterDrive, 1.0))
+                        .stopAndAdd(setDrive(shooterDrive, shooterPower))
                         .splineToLinearHeading(FixedPose(6, -6, (5.0 / 4.0) * Math.PI), Math.PI)
 
                         // shoot ball
@@ -241,19 +252,23 @@ public class AutoOP extends LinearOpMode {
     public void RedTop(Pose2d beginPose, MecanumDrive drive){
         DcMotorEx rampDrive = drive.rampDrive;
         DcMotorEx shooterDrive = drive.shooterDrive;
+
+        obeliskOffset = readObelisk(drive, beginPose);
+        beginPose = new Pose2d(0, 0, Math.PI);
+
         Actions.runBlocking(
                 drive.actionBuilder(beginPose)
                     .setTangent(0)
-                    .splineToLinearHeading(FixedPose(35, -24, Math.PI/2) , -Math.PI/2)
+                    .splineToLinearHeading(FixedPose(32 - obeliskOffset, -24, Math.PI/2) , -Math.PI/2)
 
                     // load ball
                     .stopAndAdd(setDrive(rampDrive,1.0))
-                    .strafeToLinearHeading(FixedVector(36, -63), Math.PI / 2, null, new ProfileAccelConstraint(-15, 20))
+                    .strafeToLinearHeading(FixedVector(32 - obeliskOffset, -63), Math.PI / 2, null, new ProfileAccelConstraint(-15, 20))
                     .stopAndAdd(setDrive(rampDrive,0))
 
                         // move to goal
                         .setTangent(Math.PI / 2)
-                        .stopAndAdd(setDrive(shooterDrive, 1.0))
+                        .stopAndAdd(setDrive(shooterDrive, shooterPower))
                         .splineToLinearHeading(FixedPose(-6, 6, (5.0 / 4.0) * -Math.PI), Math.PI)
 
                         // shoot ball
