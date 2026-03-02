@@ -4,6 +4,7 @@ import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.ProfileAccelConstraint;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
+import com.qualcomm.hardware.dfrobot.HuskyLens;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -28,10 +29,17 @@ public class AutoOP extends LinearOpMode {
 
         Pose2d beginPose;
         MecanumDrive drive = null;
-        int obelisk = 2;
+        //int obelisk = 2;
         boolean isTeamBlue = true;
         boolean isBeginPoseBottom = true;
         boolean found = false;
+
+        HuskyLens husky = null;
+        husky = hardwareMap.get(HuskyLens.class, "husky");
+        husky.selectAlgorithm(HuskyLens.Algorithm.TAG_RECOGNITION);
+
+        int obeliskOffset = 24 * DecodeObelisk(husky);
+
 
         //Leggi informazioni da controller per posizione iniziale e team.
         do{
@@ -108,6 +116,21 @@ public class AutoOP extends LinearOpMode {
             motor.setPower(power);
             return false;
         };
+    }
+
+    public int DecodeObelisk(HuskyLens husky){
+        do{
+            HuskyLens.Block[] tags = husky.blocks();
+            if(tags.length != 0){
+                for(int i = 0; i < tags.length; i++){
+                    if (tags[i].id > 0 && tags[i].id < 4){
+                        return tags[i].id - 1;
+                    }
+                }
+            }
+            sleep(500);
+        }while(true);
+
     }
 
     public void BlueBottom(Pose2d beginPose, MecanumDrive drive){

@@ -102,7 +102,7 @@ public class MainCodeV2 extends LinearOpMode {
 
         while (opModeIsActive()) {
 
-            odo.update();
+            //odo.update();
             double max;
 
             double axial   =  -gamepad1.left_stick_y;
