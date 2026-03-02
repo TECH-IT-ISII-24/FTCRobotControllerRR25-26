@@ -216,6 +216,9 @@ public class AutoOP extends LinearOpMode {
                     .stopAndAdd(setDrive(rampDrive,1.0))
                     .strafeToLinearHeading(FixedVector(32 - obeliskOffset, -63), Math.PI / 2, null, new ProfileAccelConstraint(-20, 25))
                         .stopAndAdd(setDrive(rampDrive,0))
+                        .stopAndAdd(setDrive(rampDrive,-0.1))
+                        .waitSeconds(0.5)
+                        .stopAndAdd(setDrive(rampDrive, 0))
 //
 //
 //                    // move to goal
