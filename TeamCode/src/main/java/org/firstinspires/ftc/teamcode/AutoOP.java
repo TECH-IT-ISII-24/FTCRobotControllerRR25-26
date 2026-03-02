@@ -12,15 +12,12 @@ import com.acmerobotics.roadrunner.Action;
 
 @Autonomous(name="AutoOP", group="autonomous")
 public class AutoOP extends LinearOpMode {
-    private HuskyLens huskyLens;
+    public HuskyLens husky = null;
+    public int obeliskOffset;
+    double shooterPower = 0.55;
 
     @Override
     public void runOpMode() {
-        huskyLens = hardwareMap.get(HuskyLens.class, "huskylens");
-
-        if(!huskyLens.knock()) telemetry.addData("Errore", "HuskyLens");
-        huskyLens.selectAlgorithm(HuskyLens.Algorithm.TAG_RECOGNITION);
-
         Pose2d beginPose;
         MecanumDrive drive = null;
         //int obelisk = 2;
@@ -28,11 +25,10 @@ public class AutoOP extends LinearOpMode {
         boolean isBeginPoseBottom = true;
         boolean found = false;
 
-        HuskyLens husky = null;
-        husky = hardwareMap.get(HuskyLens.class, "husky");
+        husky = hardwareMap.get(HuskyLens.class, "huskylens");
         husky.selectAlgorithm(HuskyLens.Algorithm.TAG_RECOGNITION);
 
-
+        if(!husky.knock()) telemetry.addData("Errore", "HuskyLens");
 
 
         //Leggi informazioni da controller per posizione iniziale e team.
@@ -61,13 +57,9 @@ public class AutoOP extends LinearOpMode {
 
         }while(!found);
 
-        int obeliskOffset = 24 * DecodeObelisk(husky);
-        telemetry.addData("Obelisk Offset: ", obeliskOffset);
+        //telemetry.addData("Obelisk Offset: ", obeliskOffset);
 
         waitForStart();
-
-
-
         
         /* TO DO: LEGGERE OBELISK */
         if(isTeamBlue){
@@ -113,6 +105,17 @@ public class AutoOP extends LinearOpMode {
             motor.setPower(power);
             return false;
         };
+    }
+
+    public int readObelisk(MecanumDrive drive, Pose2d beginPose) {
+            Actions.runBlocking(
+                    drive.actionBuilder(beginPose)
+                            .setTangent(Math.PI / 2)
+                            .strafeToLinearHeading(FixedVector(0, 0), Math.PI)
+                            .build()
+            );
+
+            return 24 * DecodeObelisk(husky);
     }
 
     public int DecodeObelisk(HuskyLens husky){
@@ -198,24 +201,28 @@ public class AutoOP extends LinearOpMode {
     public void RedBottom(Pose2d beginPose, MecanumDrive drive){
         DcMotorEx rampDrive = drive.rampDrive;
         DcMotorEx shooterDrive = drive.shooterDrive;
+
+        obeliskOffset = readObelisk(drive, beginPose);
+        beginPose = new Pose2d(0, 0, Math.PI);
+
         Actions.runBlocking(
                 drive.actionBuilder(beginPose)
-                    .setTangent(-Math.PI / 1.5)
+                        .setTangent(Math.PI)
                     //.strafeToLinearHeading(FixedVector(35, -24) , Math.PI/2)
-//                    .strafeTo(FixedVector(57, -24))
-//                    .splineToLinearHeading(FixedPose(35, -24, Math.PI/2) , -Math.PI / 2)
-//
-//                        //load ball
-//                    .stopAndAdd(setDrive(rampDrive,1.0))
-//                    .strafeToLinearHeading(FixedVector(35, -63), Math.PI / 2, null, new ProfileAccelConstraint(-20, 25))
-//                        .stopAndAdd(setDrive(rampDrive,0))
+                    //.strafeTo(FixedVector(57, -24))
+                    .strafeToLinearHeading(FixedVector(32 - obeliskOffset, -24) , Math.PI / 2)
+
+
+                    .stopAndAdd(setDrive(rampDrive,1.0))
+                    .strafeToLinearHeading(FixedVector(32 - obeliskOffset, -63), Math.PI / 2, null, new ProfileAccelConstraint(-20, 25))
+                        .stopAndAdd(setDrive(rampDrive,0))
 //
 //
 //                    // move to goal
 //                    .setTangent(Math.PI / 2)
-                    .stopAndAdd(setDrive(shooterDrive, 1.0))
+                    .stopAndAdd(setDrive(shooterDrive, shooterPower))
                         .waitSeconds(1)
-                    .splineToLinearHeading(FixedPose(-8, 4, (6.0 / 5.0) * -Math.PI), Math.PI)
+                    .splineToLinearHeading(FixedPose(-8, 4, (5.0 / 4.0) * -Math.PI), Math.PI)
 
                     // shoot ball
                     .stopAndAdd((setDrive(rampDrive, 1.0 )))
@@ -238,7 +245,7 @@ public class AutoOP extends LinearOpMode {
 
                     // load ball
                     .stopAndAdd(setDrive(rampDrive,1.0))
-                    .strafeToLinearHeading(FixedVector(35, -63), Math.PI / 2, null, new ProfileAccelConstraint(-20, 25))
+                    .strafeToLinearHeading(FixedVector(36, -63), Math.PI / 2, null, new ProfileAccelConstraint(-15, 20))
                     .stopAndAdd(setDrive(rampDrive,0))
 
                         // move to goal
