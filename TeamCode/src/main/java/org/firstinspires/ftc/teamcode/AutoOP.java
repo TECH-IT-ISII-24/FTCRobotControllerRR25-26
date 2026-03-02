@@ -32,7 +32,7 @@ public class AutoOP extends LinearOpMode {
         husky = hardwareMap.get(HuskyLens.class, "husky");
         husky.selectAlgorithm(HuskyLens.Algorithm.TAG_RECOGNITION);
 
-        int obeliskOffset = 24 * DecodeObelisk(husky);
+
 
 
         //Leggi informazioni da controller per posizione iniziale e team.
@@ -61,6 +61,9 @@ public class AutoOP extends LinearOpMode {
 
         }while(!found);
 
+        int obeliskOffset = 24 * DecodeObelisk(husky);
+        telemetry.addData("Obelisk Offset: ", obeliskOffset);
+
         waitForStart();
 
 
@@ -70,20 +73,6 @@ public class AutoOP extends LinearOpMode {
         if(isTeamBlue){
             if(isBeginPoseBottom){
                 beginPose = new Pose2d(63, 24, Math.PI);
-
-                HuskyLens.Block[] blocks = huskyLens.blocks();
-
-                while(blocks.length != 1) {
-                    // TODO: muoviu il robot
-
-                    blocks = huskyLens.blocks();
-                }
-
-                for (int i = 0; i < blocks.length; i++) {
-                    HuskyLens.Block b = blocks[i];
-
-                }
-
                 BlueBottom(beginPose, new MecanumDrive(hardwareMap, beginPose));
             }
             else{
@@ -129,11 +118,9 @@ public class AutoOP extends LinearOpMode {
     public int DecodeObelisk(HuskyLens husky){
         do{
             HuskyLens.Block[] tags = husky.blocks();
-            if(tags.length != 0){
-                for(int i = 0; i < tags.length; i++){
-                    if (tags[i].id > 0 && tags[i].id < 4){
-                        return tags[i].id - 1;
-                    }
+            for (HuskyLens.Block tag : tags) {
+                if (tag.id > 0 && tag.id < 4) {
+                    return tag.id - 1;
                 }
             }
             sleep(500);
