@@ -155,11 +155,13 @@ public class MainCodeV2 extends LinearOpMode {
                 odo.resetPosAndIMU();
             }
 
-            if(gamepad1.dpad_down){
+            if(gamepad1.dpad_down && getRuntime() > 0.2){
                 shooterPower -= 0.01;
+                resetRuntime();
             }
-            if(gamepad1.dpad_up){
+            if(gamepad1.dpad_up && getRuntime() > 0.2){
                 shooterPower += 0.01;
+                resetRuntime();
             }
 
 
