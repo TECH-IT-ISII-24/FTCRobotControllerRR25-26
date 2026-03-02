@@ -12,20 +12,14 @@ import com.acmerobotics.roadrunner.Action;
 
 @Autonomous(name="AutoOP", group="autonomous")
 public class AutoOP extends LinearOpMode {
+    private HuskyLens huskyLens;
 
     @Override
     public void runOpMode() {
-        // TO DO: CAMBIARE LA CONFIGURAZIONE DEL ROBOT PER LA RAMPDRIVE
-        // TO DO: CAMBIARE LA CONFIGURAZIONE DEL ROBOT PER LA RAMPDRIVE
-        // TO DO: CAMBIARE LA CONFIGURAZIONE DEL ROBOT PER LA RAMPDRIVE
-        // TO DO: CAMBIARE LA CONFIGURAZIONE DEL ROBOT PER LA RAMPDRIVE
-        // TO DO: CAMBIARE LA CONFIGURAZIONE DEL ROBOT PER LA RAMPDRIVE
-        // TO DO: CAMBIARE LA CONFIGURAZIONE DEL ROBOT PER LA RAMPDRIVE
-        // TO DO: CAMBIARE LA CONFIGURAZIONE DEL ROBOT PER LA RAMPDRIVE
-        // TO DO: CAMBIARE LA CONFIGURAZIONE DEL ROBOT PER LA RAMPDRIVE
-        // TO DO: CAMBIARE LA CONFIGURAZIONE DEL ROBOT PER LA RAMPDRIVE
-        // TO DO: CAMBIARE LA CONFIGURAZIONE DEL ROBOT PER LA RAMPDRIVE
+        huskyLens = hardwareMap.get(HuskyLens.class, "huskylens");
 
+        if(!huskyLens.knock()) telemetry.addData("Errore", "HuskyLens");
+        huskyLens.selectAlgorithm(HuskyLens.Algorithm.TAG_RECOGNITION);
 
         Pose2d beginPose;
         MecanumDrive drive = null;
@@ -76,6 +70,20 @@ public class AutoOP extends LinearOpMode {
         if(isTeamBlue){
             if(isBeginPoseBottom){
                 beginPose = new Pose2d(63, 24, Math.PI);
+
+                HuskyLens.Block[] blocks = huskyLens.blocks();
+
+                while(blocks.length != 1) {
+                    // TODO: muoviu il robot
+
+                    blocks = huskyLens.blocks();
+                }
+
+                for (int i = 0; i < blocks.length; i++) {
+                    HuskyLens.Block b = blocks[i];
+
+                }
+
                 BlueBottom(beginPose, new MecanumDrive(hardwareMap, beginPose));
             }
             else{
@@ -156,7 +164,7 @@ public class AutoOP extends LinearOpMode {
                         // move to goal
                         .setTangent(-Math.PI / 2)
                         .stopAndAdd(setDrive(shooterDrive, 1.0))
-                        .splineToLinearHeading(FixedPose(-24, -24, (5.0 / 4.0) * Math.PI), Math.PI)
+                        .splineToLinearHeading(FixedPose(-6, -6, (5.0 / 4.0) * Math.PI), Math.PI)
 
                         // shoot ball
                         .stopAndAdd((setDrive(rampDrive, 1.0 )))
@@ -187,7 +195,7 @@ public class AutoOP extends LinearOpMode {
                         // move to goal
                         .setTangent(-Math.PI / 2)
                         .stopAndAdd(setDrive(shooterDrive, 1.0))
-                        .splineToLinearHeading(FixedPose(24, -24, (5.0 / 4.0) * Math.PI), Math.PI)
+                        .splineToLinearHeading(FixedPose(6, -6, (5.0 / 4.0) * Math.PI), Math.PI)
 
                         // shoot ball
                         .stopAndAdd((setDrive(rampDrive, 1.0 )))
@@ -207,18 +215,20 @@ public class AutoOP extends LinearOpMode {
                 drive.actionBuilder(beginPose)
                     .setTangent(-Math.PI / 1.5)
                     //.strafeToLinearHeading(FixedVector(35, -24) , Math.PI/2)
-                    .splineToLinearHeading(FixedPose(35, -24, Math.PI/2) , -Math.PI / 2)
-
-                        //load ball
-                    .stopAndAdd(setDrive(rampDrive,1.0))
-                    .strafeToLinearHeading(FixedVector(35, -63), Math.PI / 2, null, new ProfileAccelConstraint(-20, 25))
-                        .stopAndAdd(setDrive(rampDrive,0))
-
-
-                    // move to goal
-                    .setTangent(Math.PI / 2)
+//                    .strafeTo(FixedVector(57, -24))
+//                    .splineToLinearHeading(FixedPose(35, -24, Math.PI/2) , -Math.PI / 2)
+//
+//                        //load ball
+//                    .stopAndAdd(setDrive(rampDrive,1.0))
+//                    .strafeToLinearHeading(FixedVector(35, -63), Math.PI / 2, null, new ProfileAccelConstraint(-20, 25))
+//                        .stopAndAdd(setDrive(rampDrive,0))
+//
+//
+//                    // move to goal
+//                    .setTangent(Math.PI / 2)
                     .stopAndAdd(setDrive(shooterDrive, 1.0))
-                    .splineToLinearHeading(FixedPose(-24, 24, (5.0 / 4.0) * -Math.PI), Math.PI)
+                        .waitSeconds(1)
+                    .splineToLinearHeading(FixedPose(-8, 4, (6.0 / 5.0) * -Math.PI), Math.PI)
 
                     // shoot ball
                     .stopAndAdd((setDrive(rampDrive, 1.0 )))
@@ -247,7 +257,7 @@ public class AutoOP extends LinearOpMode {
                         // move to goal
                         .setTangent(Math.PI / 2)
                         .stopAndAdd(setDrive(shooterDrive, 1.0))
-                        .splineToLinearHeading(FixedPose(-24, 24, (5.0 / 4.0) * -Math.PI), Math.PI)
+                        .splineToLinearHeading(FixedPose(-6, 6, (5.0 / 4.0) * -Math.PI), Math.PI)
 
                         // shoot ball
                         .stopAndAdd((setDrive(rampDrive, 1.0 )))
