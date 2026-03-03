@@ -198,10 +198,9 @@ public class AutoOP extends LinearOpMode {
                         .stopAndAdd(setDrive(rampDrive, -0.1))
                         .waitSeconds(0.5)
                         .stopAndAdd(setDrive(rampDrive, 0))
-//
-//
-//                    // move to goal
-//                    .setTangent(Math.PI / 2)
+
+                        // move to goal
+                        //.setTangent(Math.PI / 2)
                         .stopAndAdd(setDrive(shooterDrive, shooterPower))
                         .waitSeconds(1)
                         .splineToLinearHeading(FixedPose(-8, -12, (5.0 / 4.0) * -Math.PI), Math.PI)
