@@ -108,12 +108,75 @@ public class AutoOP extends LinearOpMode {
     }
 
     public int readObelisk(MecanumDrive drive, Pose2d beginPose) {
-            Actions.runBlocking(
-                    drive.actionBuilder(beginPose)
-                            .setTangent(Math.PI / 2)
-                            .strafeToLinearHeading(FixedVector(0, 0), Math.PI)
-                            .build()
-            );
+        //Variabili di appoggio per capire che team che punto
+        boolean isTeamBlue = true;
+        boolean isBeginPoseBottom = true;
+        boolean found = false;
+
+        //Ciclo Do-While per trovare il punto
+        do{
+            if(gamepad1.dpad_down){
+                isBeginPoseBottom = true;
+            }
+            if(gamepad1.dpad_up){
+                isBeginPoseBottom = false;
+
+            }
+            if(gamepad1.right_bumper){
+                isTeamBlue = true;
+            }
+            if(gamepad1.left_bumper){
+                isTeamBlue = false;
+            }
+            if(gamepad1.b){
+                found = true;
+            }
+
+            telemetry.addData("Position: ", (isBeginPoseBottom) ? "Bottom" : "Top" );
+            telemetry.addData("Team: ", (isTeamBlue) ? "Blue" : "Red" );
+            telemetry.addData("Confirmed: ", (found) ? "Yes" : "No" );
+            telemetry.update();
+
+        }while(!found);
+
+        //Inizio logica di settaggio della posizione
+        if(isTeamBlue){
+            if(isBeginPoseBottom){
+                Actions.runBlocking(
+                        drive.actionBuilder(beginPose)
+                                .setTangent(Math.PI / 2)
+                                .strafeToLinearHeading(FixedVector(0, 0), Math.PI)
+                                .build()
+                );
+            }
+            else {
+                Actions.runBlocking(
+                        drive.actionBuilder(beginPose)
+                                .setTangent(Math.PI / 2)
+                                .strafeToLinearHeading(FixedVector(0, 0), Math.PI)
+                                .build()
+                );
+            }
+        }
+        else{
+            if(isBeginPoseBottom){
+                Actions.runBlocking(
+                        drive.actionBuilder(beginPose)
+                                .setTangent(Math.PI / 2)
+                                .strafeToLinearHeading(FixedVector(0, 0), Math.PI)
+                                .build()
+                );
+            }
+            else {
+                Actions.runBlocking(
+                        drive.actionBuilder(beginPose)
+                                .setTangent(Math.PI / 2)
+                                .strafeToLinearHeading(FixedVector(0, 0), Math.PI)
+                                .build()
+                );
+            }
+        }
+
 
             return 24 * DecodeObelisk(husky);
     }
