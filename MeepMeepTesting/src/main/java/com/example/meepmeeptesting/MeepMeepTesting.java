@@ -1,6 +1,7 @@
 package com.example.meepmeeptesting;
 
 import com.acmerobotics.roadrunner.Pose2d;
+import com.acmerobotics.roadrunner.ProfileAccelConstraint;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.noahbres.meepmeep.MeepMeep;
 import com.noahbres.meepmeep.roadrunner.DefaultBotBuilder;
@@ -15,30 +16,36 @@ public class MeepMeepTesting {
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
                 .build();
 
-        myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(-63, 39, -Math.PI/2))
-                        // move to ball point
-                        //.stopAndAdd(setLauncher(1.0))
-                        .setTangent(0)
-                        .splineToLinearHeading(FixedPose(35, 24,-Math.PI/2) , Math.PI/2)
+        myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(-20, -12, Math.PI * ((double) 5/6)))
+                        .waitSeconds(3)
+                        .turnTo(Math.PI * ((double) 5/4))
+                        .setTangent(Math.PI)
+                        //.strafeToLinearHeading(FixedVector(35, -24) , Math.PI/2)
+                        //.strafeTo(FixedVector(57, -24))
+                        .strafeToLinearHeading(FixedVector(32 , -24), Math.PI / 2)
 
-                        // load ball
-                        //.stopAndAdd(setDrive(rampDrive,1.0))
-                        .strafeToLinearHeading(FixedVector(35, 63), -Math.PI / 2)
-                        //.stopAndAdd(setDrive(rampDrive,0))
 
-                        // move to goal
-                        .setTangent(-Math.PI / 2)
-                        .splineToLinearHeading(FixedPose(-24, -24, (5.0 / 4.0) * Math.PI), Math.PI)
+                        //.stopAndAdd(setDrive(rampDrive, 1.0))
+                        .strafeToLinearHeading(FixedVector(32 , -63), Math.PI / 2, null, new ProfileAccelConstraint(-20, 25))
+                        //.stopAndAdd(setDrive(rampDrive, 0))
+                        //.stopAndAdd(setDrive(rampDrive, -0.1))
+                        .waitSeconds(0.5)
+                        //.stopAndAdd(setDrive(rampDrive, 0))
+//
+//
+//                    // move to goal
+//                    .setTangent(Math.PI / 2)
+                        //.stopAndAdd(setDrive(shooterDrive, shooterPower))
+                        .waitSeconds(1)
+                        .splineToLinearHeading(FixedPose(-8, -12, (5.0 / 4.0) * -Math.PI), Math.PI)
 
                         // shoot ball
-                        //.stopAndAdd(setDrive(shooterDrive,1.0))
-                        .waitSeconds(2.0)
-                        //.stopAndAdd(setDrive(rampDrive,1.0))
+                        //.stopAndAdd((setDrive(rampDrive, 1.0)))
 
                         // turn off all
-                        .waitSeconds(2.0)
-                        //.stopAndAdd(setDrive(shooterDrive,0))
-                        //.stopAndAdd(setDrive(rampDrive,0))
+                        //.waitSeconds(5.0)
+                        //.stopAndAdd(setDrive(shooterDrive, 0))
+                        //.stopAndAdd(setDrive(rampDrive, 0))
                         .build()
         );
 

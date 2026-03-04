@@ -119,9 +119,11 @@ public class AutoOP extends LinearOpMode {
 
     public void DriveToObelisk(Pose2d beginPose, MecanumDrive drive, boolean isTeamBlue) {
         int teamOffset = (isTeamBlue) ? +12 : -12;
+        double teamRotation = (isTeamBlue) ? Math.PI * ((double) 7 /6) : Math.PI * ((double) 5 /6);
+
         Actions.runBlocking(
                 drive.actionBuilder(beginPose)
-                        .strafeToLinearHeading(new Vector2d(0, teamOffset), Math.PI)
+                        .splineToLinearHeading(new Pose2d(-20, teamOffset,teamRotation), beginPose.heading)
                         //Lanciare palline pre-caricate
                         .build()
 
@@ -129,7 +131,7 @@ public class AutoOP extends LinearOpMode {
 
         int obeliskOffset = DecodeObelisk(husky);
 
-        beginPose = new Pose2d(0, teamOffset, Math.PI);
+        beginPose = new Pose2d(-20, teamOffset, teamRotation);
         if (isTeamBlue) {
             BlueAuto(beginPose, drive, obeliskOffset);
         } else {
@@ -143,10 +145,19 @@ public class AutoOP extends LinearOpMode {
 
         Actions.runBlocking(
                 drive.actionBuilder(beginPose)
+                        .stopAndAdd(setDrive(shooterDrive, 1))
+                        .waitSeconds(2)
                         // move to ball point
-                        //.stopAndAdd(setLauncher(1.0))
+                        .stopAndAdd(setDrive(rampDrive, 1))
+                        .waitSeconds(5)
+                        .stopAndAdd(setDrive(shooterDrive, 1))
+                        .stopAndAdd(setDrive(rampDrive, 1))
+
+                        .waitSeconds(2)
+                        .turnTo(Math.PI * ((double) 5/4))
                         .setTangent(Math.PI / 2)
                         .strafeToLinearHeading(FixedVector(32 - obeliskOffset, 24), -Math.PI / 2)
+
 
                         // load ball
                         .stopAndAdd(setDrive(rampDrive, 1.0))
@@ -186,6 +197,9 @@ public class AutoOP extends LinearOpMode {
 
         Actions.runBlocking(
                 drive.actionBuilder(beginPose)
+                        .waitSeconds(1)
+                        //.turnTo(Math.PI * ((double) 3/4))
+                        .waitSeconds(1)
                         .setTangent(Math.PI)
                         //.strafeToLinearHeading(FixedVector(35, -24) , Math.PI/2)
                         //.strafeTo(FixedVector(57, -24))
