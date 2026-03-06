@@ -14,7 +14,7 @@ import com.acmerobotics.roadrunner.Action;
 public class AutoOP extends LinearOpMode {
     public HuskyLens husky = null;
     public int obeliskOffset;
-    double shooterPower = 0.95;
+    double shooterPower = 0.92;
 
     @Override
     public void runOpMode() {
@@ -159,16 +159,16 @@ public class AutoOP extends LinearOpMode {
                         .stopAndAdd(setDrive(rampDrive, 0))
                         //END of Set 1, Begin SPIKE collection
                         .setTangent(Math.PI)
-                        .strafeToLinearHeading(FixedVector(36 - obeliskOffset, -24), Math.PI / 2)
+                        .strafeToLinearHeading(FixedVector(35 - obeliskOffset, -12), Math.PI / 2)
                         .stopAndAdd(setDrive(rampDrive, 1.0))
-                        .strafeToLinearHeading(FixedVector(36 - obeliskOffset, -54), Math.PI / 2, null, new ProfileAccelConstraint(-20, 25))
+                        .strafeToLinearHeading(FixedVector(35 - obeliskOffset, -60), Math.PI / 2, null, new ProfileAccelConstraint(-20, 25))
                         .stopAndAdd(setDrive(rampDrive, 0))
                         .stopAndAdd(setDrive(rampDrive, -0.1))
                         .waitSeconds(0.5)
                         .stopAndAdd(setDrive(rampDrive, 0))
                         //Ready flywheel for Set 2
                         .stopAndAdd(setDrive(shooterDrive, shooterPower))
-                        .splineToLinearHeading(FixedPose(-8, -12, Math.PI * 1.15), Math.PI)
+                        .splineToLinearHeading(FixedPose(-8, -12, Math.PI * 1.17), Math.PI)
                         .stopAndAdd((setDrive(rampDrive, 1.0)))
                         .waitSeconds(3.25)
                         .stopAndAdd(setDrive(shooterDrive, 0))
@@ -195,16 +195,16 @@ public class AutoOP extends LinearOpMode {
                         .stopAndAdd(setDrive(rampDrive, 0))
                         //END of Set 1, Begin SPIKE collection
                         .setTangent(Math.PI)
-                        .strafeToLinearHeading(FixedVector(36 - obeliskOffset, 24), -Math.PI / 2)
+                        .strafeToLinearHeading(FixedVector(35 - obeliskOffset, 12), -Math.PI / 2)
                         .stopAndAdd(setDrive(rampDrive, 1.0))
-                        .strafeToLinearHeading(FixedVector(36 - obeliskOffset, 54), -Math.PI / 2, null, new ProfileAccelConstraint(-20, 25))
+                        .strafeToLinearHeading(FixedVector(35 - obeliskOffset, 60), -Math.PI / 2, null, new ProfileAccelConstraint(-20, 25))
                         .stopAndAdd(setDrive(rampDrive, 0))
                         .stopAndAdd(setDrive(rampDrive, -0.1))
                         .waitSeconds(0.5)
                         .stopAndAdd(setDrive(rampDrive, 0))
                         //Ready flywheel for Set 2
                         .stopAndAdd(setDrive(shooterDrive, shooterPower))
-                        .splineToLinearHeading(FixedPose(-8, 12, Math.PI * 0.85), Math.PI)
+                        .splineToLinearHeading(FixedPose(-8, 12, Math.PI * 0.87), Math.PI)
                         .stopAndAdd((setDrive(rampDrive, 1.0)))
                         .waitSeconds(3.25)
                         .stopAndAdd(setDrive(shooterDrive, 0))
