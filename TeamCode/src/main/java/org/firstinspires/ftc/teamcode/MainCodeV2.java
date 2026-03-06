@@ -59,7 +59,7 @@ public class MainCodeV2 extends LinearOpMode {
 
     private DcMotorEx launcherDrive = null;
     private DcMotorEx shooterDrive = null;
-    private double shooterPower = 1;
+    private double shooterPower = 0.95;
 
     private GoBildaPinpointDriver odo = null;
     private ElapsedTime runtime = new ElapsedTime();
