@@ -131,8 +131,8 @@ public class AutoOP extends LinearOpMode {
 
         );
 //
-        //int obeliskOffset = DecodeObelisk(husky);
-        obeliskOffset = 24;
+        int obeliskOffset = DecodeObelisk(husky);
+        //obeliskOffset = 24;
 
 
 

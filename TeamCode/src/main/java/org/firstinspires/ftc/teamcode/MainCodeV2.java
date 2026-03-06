@@ -135,7 +135,7 @@ public class MainCodeV2 extends LinearOpMode {
                 rightBackPower  /= max;
             }
 
-            shooterDrive.get
+            // shooterDrive.get
 
 
             leftFrontDrive.setPower(leftBackPower);
