@@ -113,7 +113,8 @@ public class AutoOP extends LinearOpMode {
                     return (tag.id - 1) * 24;
                 }
             }
-        } while (true);
+        } while (getRuntime() < 5);
+        return 48;
     }
 
     public void DriveToObelisk(Pose2d beginPose, MecanumDrive drive, boolean isTeamBlue) {
@@ -130,7 +131,7 @@ public class AutoOP extends LinearOpMode {
                         .build()
 
         );
-//
+        resetRuntime();
         int obeliskOffset = DecodeObelisk(husky);
         //obeliskOffset = 24;
 
