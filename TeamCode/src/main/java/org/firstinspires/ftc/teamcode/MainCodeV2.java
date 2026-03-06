@@ -31,6 +31,7 @@ package org.firstinspires.ftc.teamcode;
 
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
 
+import com.qualcomm.hardware.dfrobot.HuskyLens;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -63,11 +64,17 @@ public class MainCodeV2 extends LinearOpMode {
     private GoBildaPinpointDriver odo = null;
     private ElapsedTime runtime = new ElapsedTime();
 
+    private HuskyLens husky = null;
+
+    private int foundTag = 0;
+
 
     @Override
     public void runOpMode() {
 
         odo = hardwareMap.get(GoBildaPinpointDriver.class,"pinpoint");
+        husky = hardwareMap.get(HuskyLens.class, "huskylens");
+        husky.selectAlgorithm(HuskyLens.Algorithm.TAG_RECOGNITION);
 
 
         leftFrontDrive = hardwareMap.get(DcMotorEx.class, "left_front_drive");
@@ -94,12 +101,14 @@ public class MainCodeV2 extends LinearOpMode {
         rightBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         telemetry.addData("Status", "Initialized");
-        telemetry.update();
+
         odo.resetPosAndIMU();
 
-
+        telemetry.addData("Husky? " , husky.knock());
+        telemetry.update();
         waitForStart();
         runtime.reset();
+
 
         while (opModeIsActive()) {
 
@@ -125,6 +134,8 @@ public class MainCodeV2 extends LinearOpMode {
                 leftBackPower   /= max;
                 rightBackPower  /= max;
             }
+
+            shooterDrive.get
 
 
             leftFrontDrive.setPower(leftBackPower);
@@ -182,6 +193,7 @@ public class MainCodeV2 extends LinearOpMode {
             telemetry.addData("Front left/Right", "%4.2f, %4.2f", leftFrontPower, rightFrontPower);
             telemetry.addData("Back  left/Right", "%4.2f, %4.2f", leftBackPower, rightBackPower);
             telemetry.addData("Shooter power ", "%4.2f", shooterPower);
+            telemetry.addData("Reading tags: ", husky.blocks().length);
             telemetry.update();
         }
     }}

@@ -18,7 +18,7 @@ public class MeepMeepTesting {
 
         myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(-20, -12, Math.PI * ((double) 5/6)))
                         .waitSeconds(3)
-                        .turnTo(Math.PI * ((double) 5/4))
+                        .turnTo(Math.PI * ((double) 3/4))
                         .setTangent(Math.PI)
                         //.strafeToLinearHeading(FixedVector(35, -24) , Math.PI/2)
                         //.strafeTo(FixedVector(57, -24))
@@ -46,6 +46,15 @@ public class MeepMeepTesting {
                         //.waitSeconds(5.0)
                         //.stopAndAdd(setDrive(shooterDrive, 0))
                         //.stopAndAdd(setDrive(rampDrive, 0))
+                        .strafeToLinearHeading(FixedVector(60, -32), Math.PI / 2)
+                        //.stopAndAdd(setDrive(rampDrive, 1.0))
+                        .strafeToLinearHeading(FixedVector(60, -63), Math.PI / 2, null, new ProfileAccelConstraint(-20, 25))
+                        //.stopAndAdd(setDrive(rampDrive, 0))
+                        .strafeToLinearHeading(FixedVector(60, -32), Math.PI / 2)
+                        //.stopAndAdd(setDrive(rampDrive, -0.1))
+                        .waitSeconds(0.5)
+                        //.stopAndAdd(setDrive(rampDrive, 0))
+
                         .build()
         );
 

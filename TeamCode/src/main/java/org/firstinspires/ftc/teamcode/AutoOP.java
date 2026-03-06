@@ -14,7 +14,7 @@ import com.acmerobotics.roadrunner.Action;
 public class AutoOP extends LinearOpMode {
     public HuskyLens husky = null;
     public int obeliskOffset;
-    double shooterPower = 0.55;
+    double shooterPower = 0.95;
 
     @Override
     public void runOpMode() {
@@ -59,7 +59,7 @@ public class AutoOP extends LinearOpMode {
 
         waitForStart();
 
-        if (isTeamBlue) {
+        if (!isTeamBlue) {
             if (isBeginPoseBottom) {
                 beginPose = new Pose2d(63, 24, Math.PI);
                 //BlueBottom(beginPose, new MecanumDrive(hardwareMap, beginPose));
@@ -113,25 +113,30 @@ public class AutoOP extends LinearOpMode {
                     return (tag.id - 1) * 24;
                 }
             }
-            sleep(500);
         } while (true);
     }
 
     public void DriveToObelisk(Pose2d beginPose, MecanumDrive drive, boolean isTeamBlue) {
-        int teamOffset = (isTeamBlue) ? +12 : -12;
-        double teamRotation = (isTeamBlue) ? Math.PI * ((double) 7 /6) : Math.PI * ((double) 5 /6);
+        int teamOffset = (!isTeamBlue) ? +12 : -12;
+        double teamTangent = (!isTeamBlue) ? -Math.PI / 2 : Math.PI / 2 ;
+        double teamRotation = (!isTeamBlue) ? 1.10 : 0.90;
+
 
         Actions.runBlocking(
                 drive.actionBuilder(beginPose)
-                        .splineToLinearHeading(new Pose2d(-20, teamOffset,teamRotation), beginPose.heading)
+                        .setTangent(Math.PI )
+                        .splineToLinearHeading(new Pose2d(0, teamOffset, Math.PI * teamRotation), teamTangent)
                         //Lanciare palline pre-caricate
                         .build()
 
         );
+//
+        //int obeliskOffset = DecodeObelisk(husky);
+        obeliskOffset = 24;
 
-        int obeliskOffset = DecodeObelisk(husky);
 
-        beginPose = new Pose2d(-20, teamOffset, teamRotation);
+
+        beginPose = new Pose2d(0, teamOffset, Math.PI * teamRotation);
         if (isTeamBlue) {
             BlueAuto(beginPose, drive, obeliskOffset);
         } else {
@@ -145,45 +150,31 @@ public class AutoOP extends LinearOpMode {
 
         Actions.runBlocking(
                 drive.actionBuilder(beginPose)
-                        .stopAndAdd(setDrive(shooterDrive, 1))
-                        .waitSeconds(2)
-                        // move to ball point
+                        .stopAndAdd(setDrive(shooterDrive, shooterPower))
+                        .strafeToLinearHeading(new Vector2d(-12,-12), Math.PI * 1.15)
+                        .waitSeconds(1)
                         .stopAndAdd(setDrive(rampDrive, 1))
-                        .waitSeconds(5)
-                        .stopAndAdd(setDrive(shooterDrive, 1))
-                        .stopAndAdd(setDrive(rampDrive, 1))
-
-                        .waitSeconds(2)
-                        .turnTo(Math.PI * ((double) 5/4))
-                        .setTangent(Math.PI / 2)
-                        .strafeToLinearHeading(FixedVector(32 - obeliskOffset, 24), -Math.PI / 2)
-
-
-                        // load ball
+                        .waitSeconds(3.25)
+                        .stopAndAdd(setDrive(shooterDrive, 0))
+                        .stopAndAdd(setDrive(rampDrive, 0))
+                        //END of Set 1, Begin SPIKE collection
+                        .setTangent(Math.PI)
+                        .strafeToLinearHeading(FixedVector(36 - obeliskOffset, -24), Math.PI / 2)
                         .stopAndAdd(setDrive(rampDrive, 1.0))
-                        .strafeToLinearHeading(FixedVector(32 - obeliskOffset, 63), -Math.PI / 2, null, new ProfileAccelConstraint(-25, 30))
-                        //TODO potremmo usare azioni parallele..
-                        //Principalmente nello spinup del launcher mentre ci spostiamo in posizione
-                        //Le posizioni di lancio potrebbero cambiare in base a come è
-                        //configurata la rampa.
-
+                        .strafeToLinearHeading(FixedVector(36 - obeliskOffset, -54), Math.PI / 2, null, new ProfileAccelConstraint(-20, 25))
                         .stopAndAdd(setDrive(rampDrive, 0))
                         .stopAndAdd(setDrive(rampDrive, -0.1))
                         .waitSeconds(0.5)
                         .stopAndAdd(setDrive(rampDrive, 0))
-
-                        // move to goal
-                        .setTangent(-Math.PI / 2)
+                        //Ready flywheel for Set 2
                         .stopAndAdd(setDrive(shooterDrive, shooterPower))
-                        .splineToLinearHeading(FixedPose(-8, +12, (5.0 / 4.0) * Math.PI), Math.PI)
-
-                        // shoot ball
+                        .splineToLinearHeading(FixedPose(-8, -12, Math.PI * 1.15), Math.PI)
                         .stopAndAdd((setDrive(rampDrive, 1.0)))
-
-                        // turn off all
-                        .waitSeconds(5.0)
+                        .waitSeconds(3.25)
                         .stopAndAdd(setDrive(shooterDrive, 0))
                         .stopAndAdd(setDrive(rampDrive, 0))
+                        .strafeTo(new Vector2d(-48, -24))
+                        //End of Set 2
                         .build()
         );
     }
@@ -192,40 +183,46 @@ public class AutoOP extends LinearOpMode {
         DcMotorEx rampDrive = drive.rampDrive;
         DcMotorEx shooterDrive = drive.shooterDrive;
 
-        obeliskOffset = DecodeObelisk(husky);
-        beginPose = new Pose2d(0, 0, Math.PI);
-
         Actions.runBlocking(
                 drive.actionBuilder(beginPose)
+                        //Post-AUTO, ready to shoot pre-loaded
+                        .stopAndAdd(setDrive(shooterDrive, shooterPower))
+                        .strafeToLinearHeading(new Vector2d(-12,12), Math.PI * 0.85)
                         .waitSeconds(1)
-                        //.turnTo(Math.PI * ((double) 3/4))
-                        .waitSeconds(1)
+                        .stopAndAdd(setDrive(rampDrive, 1))
+                        .waitSeconds(3.25)
+                        .stopAndAdd(setDrive(shooterDrive, 0))
+                        .stopAndAdd(setDrive(rampDrive, 0))
+                        //END of Set 1, Begin SPIKE collection
                         .setTangent(Math.PI)
-                        //.strafeToLinearHeading(FixedVector(35, -24) , Math.PI/2)
-                        //.strafeTo(FixedVector(57, -24))
-                        .strafeToLinearHeading(FixedVector(32 - obeliskOffset, -24), Math.PI / 2)
-
-
+                        .strafeToLinearHeading(FixedVector(36 - obeliskOffset, 24), -Math.PI / 2)
                         .stopAndAdd(setDrive(rampDrive, 1.0))
-                        .strafeToLinearHeading(FixedVector(32 - obeliskOffset, -63), Math.PI / 2, null, new ProfileAccelConstraint(-20, 25))
+                        .strafeToLinearHeading(FixedVector(36 - obeliskOffset, 54), -Math.PI / 2, null, new ProfileAccelConstraint(-20, 25))
                         .stopAndAdd(setDrive(rampDrive, 0))
                         .stopAndAdd(setDrive(rampDrive, -0.1))
                         .waitSeconds(0.5)
                         .stopAndAdd(setDrive(rampDrive, 0))
-
-                        // move to goal
-                        //.setTangent(Math.PI / 2)
+                        //Ready flywheel for Set 2
                         .stopAndAdd(setDrive(shooterDrive, shooterPower))
-                        .waitSeconds(1)
-                        .splineToLinearHeading(FixedPose(-8, -12, (5.0 / 4.0) * -Math.PI), Math.PI)
-
-                        // shoot ball
+                        .splineToLinearHeading(FixedPose(-8, 12, Math.PI * 0.85), Math.PI)
                         .stopAndAdd((setDrive(rampDrive, 1.0)))
-
-                        // turn off all
-                        .waitSeconds(5.0)
+                        .waitSeconds(3.25)
                         .stopAndAdd(setDrive(shooterDrive, 0))
                         .stopAndAdd(setDrive(rampDrive, 0))
+                        //End of Set 2
+//                        .strafeToLinearHeading(FixedVector(60, -32), Math.PI / 2)
+//                        .stopAndAdd(setDrive(rampDrive, 1.0))
+//                        .strafeToLinearHeading(FixedVector(60, -63), Math.PI / 2, null, new ProfileAccelConstraint(-20, 25))
+//                        .stopAndAdd(setDrive(rampDrive, 0))
+//                        .stopAndAdd(setDrive(rampDrive, -0.1))
+//                        .waitSeconds(0.5)
+//                        .stopAndAdd(setDrive(rampDrive, 0))
+//                        .stopAndAdd(setDrive(shooterDrive, shooterPower))
+//                        .setTangent(Math.PI / 2 )
+//                        .splineToLinearHeading(new Pose2d(-8,-12, Math.PI * 0.70), 0 )
+//                        .stopAndAdd(setDrive(rampDrive, 1))
+//                        .waitSeconds(3.25)
+                        .strafeTo(new Vector2d(-48, 24))
                         .build()
         );
     }
