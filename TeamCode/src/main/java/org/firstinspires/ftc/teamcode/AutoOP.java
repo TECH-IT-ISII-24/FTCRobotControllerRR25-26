@@ -64,7 +64,7 @@ public class AutoOP extends LinearOpMode {
                 beginPose = new Pose2d(63, 24, Math.PI);
                 //BlueBottom(beginPose, new MecanumDrive(hardwareMap, beginPose));
             } else {
-                beginPose = new Pose2d(-63, 39, 0);
+                beginPose = new Pose2d(-60, 39, 0);
                 //BlueTop(beginPose ,new MecanumDrive(hardwareMap, beginPose));
             }
         } else {
@@ -125,7 +125,7 @@ public class AutoOP extends LinearOpMode {
 
         Actions.runBlocking(
                 drive.actionBuilder(beginPose)
-                        .setTangent(Math.PI )
+                        .setTangent(Math.PI)
                         .splineToLinearHeading(new Pose2d(0, teamOffset, Math.PI * teamRotation), teamTangent)
                         //Lanciare palline pre-caricate
                         .build()
@@ -188,7 +188,7 @@ public class AutoOP extends LinearOpMode {
                 drive.actionBuilder(beginPose)
                         //Post-AUTO, ready to shoot pre-loaded
                         .stopAndAdd(setDrive(shooterDrive, shooterPower))
-                        .strafeToLinearHeading(new Vector2d(-12,12), Math.PI * 0.85)
+                        .strafeToLinearHeading(new Vector2d(-12,12), Math.PI * 0.87)
                         .waitSeconds(1)
                         .stopAndAdd(setDrive(rampDrive, 1))
                         .waitSeconds(3.25)

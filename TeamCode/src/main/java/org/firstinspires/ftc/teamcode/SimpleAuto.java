@@ -16,12 +16,14 @@ public class SimpleAuto extends LinearOpMode {
             public void runOpMode(){
         waitForStart();
 
-        Pose2d beginPose = new Pose2d(0,0,0);
+        Pose2d beginPose = new Pose2d(63, 12, Math.PI);
         MecanumDrive drive = new MecanumDrive(hardwareMap, beginPose);
 
         Actions.runBlocking(
                 drive.actionBuilder(beginPose)
-                        .strafeToLinearHeading(new Vector2d(36, 0), 0)
+                        .strafeToLinearHeading(new Vector2d(-12, 12), Math.PI * 0.78)
+                        .strafeToLinearHeading(new Vector2d(60,12), Math.PI)
+                        .strafeTo(new Vector2d(60, 48))
                         .build()
         );
 
