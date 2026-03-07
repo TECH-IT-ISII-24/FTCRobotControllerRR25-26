@@ -14,7 +14,7 @@ import com.acmerobotics.roadrunner.Action;
 public class AutoOP extends LinearOpMode {
     public HuskyLens husky = null;
     public int obeliskOffset;
-    double shooterPower = 0.92;
+    double shooterPower = 0.65;
 
     @Override
     public void runOpMode() {
