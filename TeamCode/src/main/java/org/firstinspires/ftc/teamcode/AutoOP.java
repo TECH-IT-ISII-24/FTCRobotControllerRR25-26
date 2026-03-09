@@ -14,13 +14,13 @@ import com.acmerobotics.roadrunner.Action;
 public class AutoOP extends LinearOpMode {
     public HuskyLens husky = null;
     public int obeliskOffset;
-    double shooterPower = 0.65;
+    double shooterPower = 0.50;
 
     @Override
     public void runOpMode() {
         Pose2d beginPose;
         MecanumDrive drive = null;
-        //int obelisk = 2;
+
         boolean isTeamBlue = true;
         boolean isBeginPoseBottom = true;
         boolean found = false;
@@ -50,9 +50,9 @@ public class AutoOP extends LinearOpMode {
                 found = true;
             }
 
-            telemetry.addData("Position: ", (isBeginPoseBottom) ? "Bottom" : "Top");
-            telemetry.addData("Team: ", (isTeamBlue) ? "Blue" : "Red");
-            telemetry.addData("Confirmed: ", (found) ? "Yes" : "No");
+            telemetry.addData("Position ", (isBeginPoseBottom) ? "Bottom" : "Top");
+            telemetry.addData("Team ", (isTeamBlue) ? "Blue" : "Red");
+            telemetry.addData("Confirmed ", (found) ? "Yes" : "No");
             telemetry.update();
 
         } while (!found && !isStopRequested());
@@ -169,7 +169,7 @@ public class AutoOP extends LinearOpMode {
                         .stopAndAdd(setDrive(rampDrive, 0))
                         //Ready flywheel for Set 2
                         .stopAndAdd(setDrive(shooterDrive, shooterPower))
-                        .splineToLinearHeading(FixedPose(-8, -12, Math.PI * 1.17), Math.PI)
+                        .splineToLinearHeading(FixedPose(-8, -12, Math.PI * 1.15), Math.PI)
                         .stopAndAdd((setDrive(rampDrive, 1.0)))
                         .waitSeconds(3.25)
                         .stopAndAdd(setDrive(shooterDrive, 0))

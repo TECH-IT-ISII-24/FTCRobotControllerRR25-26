@@ -19,7 +19,7 @@ public class SimpleAuto extends LinearOpMode {
         waitForStart();
 
         //Pose2d beginPose = new Pose2d(63, 12, Math.PI);
-        Pose2d beginPose = new Pose2d(63, 24, Math.PI);
+        Pose2d beginPose = new Pose2d(-63, -39, -Math.PI / 2);
         MecanumDrive drive = new MecanumDrive(hardwareMap, beginPose);
         DcMotorEx rampDrive = drive.rampDrive;
         DcMotorEx shooterDrive = drive.shooterDrive;
@@ -40,7 +40,11 @@ public class SimpleAuto extends LinearOpMode {
 
         Actions.runBlocking(
                 drive.actionBuilder(beginPose)
-                        .strafeTo(new Vector2d(60, 56))
+                        .strafeTo(new Vector2d(-60, 12))
+                        .stopAndAdd(setDrive(shooterDrive, 0.50))
+                        .waitSeconds(1.5)
+                        .stopAndAdd(setDrive(rampDrive, 1))
+                        .waitSeconds(5)
                         .build()
         );
 
