@@ -29,53 +29,34 @@
 
 package org.firstinspires.ftc.teamcode;
 
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
-
 import com.qualcomm.hardware.dfrobot.HuskyLens;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
-import org.firstinspires.ftc.robotcore.external.navigation.UnnormalizedAngleUnit;
-
-import java.util.Locale;
-
-
-
-@TeleOp(name="goBilda Code", group="Development")
-
+@TeleOp(name="goBilda Code V2", group="Development")
 public class MainCodeV2 extends LinearOpMode {
 
-    private DcMotorEx leftFrontDrive = null;
-    private DcMotorEx leftBackDrive = null;
-    private DcMotorEx rightBackDrive = null;
-    private DcMotorEx rightFrontDrive = null;
+    private DcMotorEx leftFrontDrive, leftBackDrive, rightBackDrive, rightFrontDrive;
+    private DcMotorEx launcherDrive, shooterDrive;
 
-    private DcMotorEx launcherDrive = null;
-    private DcMotorEx shooterDrive = null;
     private double shooterPower = 0.80;
+    private GoBildaPinpointDriver odo;
+    private HuskyLens husky;
 
-    private GoBildaPinpointDriver odo = null;
-    private ElapsedTime runtime = new ElapsedTime();
+    // timers to prevent lag and handle button timing
+    private ElapsedTime buttonTimer = new ElapsedTime();
+    private ElapsedTime huskyTimer = new ElapsedTime();
 
-    private HuskyLens husky = null;
-
-    private int foundTag = 0;
-
+    private int foundTagsCount = 0;
 
     @Override
     public void runOpMode() {
-
-        odo = hardwareMap.get(GoBildaPinpointDriver.class,"pinpoint");
+        // hardware mapping
+        odo = hardwareMap.get(GoBildaPinpointDriver.class, "pinpoint");
         husky = hardwareMap.get(HuskyLens.class, "huskylens");
-        husky.selectAlgorithm(HuskyLens.Algorithm.TAG_RECOGNITION);
-
 
         leftFrontDrive = hardwareMap.get(DcMotorEx.class, "left_front_drive");
         leftBackDrive = hardwareMap.get(DcMotorEx.class, "left_back_drive");
@@ -84,12 +65,13 @@ public class MainCodeV2 extends LinearOpMode {
         launcherDrive = hardwareMap.get(DcMotorEx.class, "ramp_drive");
         shooterDrive = hardwareMap.get(DcMotorEx.class, "shooter_drive");
 
-        odo.setOffsets(-60, +175.0); //these are tuned for 3110-0002-0001 Product Insight #1
-
+        // odometry setup
+        odo.setOffsets(-60, 175.0);
         odo.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
-
         odo.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.REVERSED, GoBildaPinpointDriver.EncoderDirection.REVERSED);
+        odo.resetPosAndIMU();
 
+        // motor directions and braking
         leftFrontDrive.setDirection(DcMotor.Direction.REVERSE);
         leftBackDrive.setDirection(DcMotor.Direction.REVERSE);
         rightFrontDrive.setDirection(DcMotor.Direction.FORWARD);
@@ -100,100 +82,86 @@ public class MainCodeV2 extends LinearOpMode {
         leftBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        telemetry.addData("Status", "Initialized");
+        // husky lens mode
+        husky.selectAlgorithm(HuskyLens.Algorithm.TAG_RECOGNITION);
 
-        odo.resetPosAndIMU();
-
-        telemetry.addData("Husky? " , husky.knock());
+        telemetry.addData("status", "initialized");
         telemetry.update();
-        waitForStart();
-        runtime.reset();
 
+        waitForStart();
+        buttonTimer.reset();
+        huskyTimer.reset();
 
         while (opModeIsActive()) {
-
-            //odo.update();
-            double max;
-
-            double axial   =  -gamepad1.left_stick_y;
-            double lateral =  -gamepad1.left_stick_x;
+            // mecanum drive math
+            double axial   = -gamepad1.left_stick_y;
+            double lateral = gamepad1.left_stick_x;
             double yaw     =  gamepad1.right_stick_x;
 
-            double leftFrontPower  = axial + lateral + yaw;
-            double rightFrontPower = axial - lateral - yaw;
-            double leftBackPower   = axial - lateral + yaw;
-            double rightBackPower  = axial + lateral - yaw;
+            double lf = axial + lateral + yaw;
+            double rf = axial - lateral - yaw;
+            double lb = axial - lateral + yaw;
+            double rb = axial + lateral - yaw;
 
-            max = Math.max(Math.abs(leftFrontPower), Math.abs(rightFrontPower));
-            max = Math.max(max, Math.abs(leftBackPower));
-            max = Math.max(max, Math.abs(rightBackPower));
+            // normalize motor power
+            double max = Math.max(Math.abs(lf), Math.abs(rf));
+            max = Math.max(max, Math.abs(lb));
+            max = Math.max(max, Math.abs(rb));
 
             if (max > 1.0) {
-                leftFrontPower  /= max;
-                rightFrontPower /= max;
-                leftBackPower   /= max;
-                rightBackPower  /= max;
+                lf /= max; rf /= max; lb /= max; rb /= max;
             }
 
-            // shooterDrive.get
+            // set power to motors
+            leftFrontDrive.setPower(lf);
+            rightFrontDrive.setPower(rf);
+            leftBackDrive.setPower(lb);
+            rightBackDrive.setPower(rb);
 
-
-            leftFrontDrive.setPower(leftBackPower);
-            rightFrontDrive.setPower(rightBackPower);
-            leftBackDrive.setPower(leftFrontPower);
-            rightBackDrive.setPower(rightFrontPower);
-
-            if(gamepad1.triangle){
+            // intake/launcher control
+            if (gamepad1.triangle) {
                 launcherDrive.setPower(1);
-            }else if (gamepad1.x){
+            } else if (gamepad1.x) {
                 launcherDrive.setPower(-1);
-            }
-            else{
+            } else {
                 launcherDrive.setPower(0);
             }
 
-            if(gamepad1.left_bumper) {
+            // shooter control
+            if (gamepad1.left_bumper) {
                 shooterDrive.setPower(shooterPower);
-            }
-            else if(gamepad1.right_bumper){
+            } else if (gamepad1.right_bumper) {
                 shooterDrive.setPower(-shooterPower);
-            }
-            else {
+            } else {
                 shooterDrive.setPower(0);
             }
 
-            if(gamepad1.b) {
+            // change shooter power with dpad
+            if (buttonTimer.seconds() > 0.2) {
+                if (gamepad1.dpad_up) {
+                    shooterPower += 0.05;
+                    buttonTimer.reset();
+                } else if (gamepad1.dpad_down) {
+                    shooterPower -= 0.05;
+                    buttonTimer.reset();
+                }
+            }
+
+            // reset odometry position
+            if (gamepad1.b) {
                 odo.resetPosAndIMU();
             }
 
-            if(gamepad1.dpad_down && getRuntime() > 0.2){
-                shooterPower -= 0.01;
-                resetRuntime();
-            }
-            if(gamepad1.dpad_up && getRuntime() > 0.2){
-                shooterPower += 0.01;
-                resetRuntime();
+            // read husky lens every 100ms to stop lag
+            if (huskyTimer.milliseconds() > 100) {
+                foundTagsCount = husky.blocks().length;
+                huskyTimer.reset();
             }
 
-
-
-            //Pose2D pos = odo.getPosition();
-            //String data = String.format(Locale.US, "{X: %.3f, Y: %.3f, H: %.3f}", pos.getX(DistanceUnit.MM), pos.getY(DistanceUnit.MM), pos.getHeading(AngleUnit.DEGREES));
-            //telemetry.addData("Position", data);
-
-            //String velocity = String.format(Locale.US,"{XVel: %.3f, YVel: %.3f, HVel: %.3f}", odo.getVelX(), odo.getVelY(), odo.getHeadingVelocity());
-            //telemetry.addData("Velocity", velocity);
-
-            //telemetry.addData("Status", odo.getDeviceStatus());
-
-            //telemetry.addData("Pinpoint Frequency", odo.getFrequency()); //prints/gets the current refresh rate of the Pinpoint
-
-            // Show the elapsed game time and wheel power.
-            //telemetry.addData("Status", "Run Time: " + runtime.toString());
-            telemetry.addData("Front left/Right", "%4.2f, %4.2f", leftFrontPower, rightFrontPower);
-            telemetry.addData("Back  left/Right", "%4.2f, %4.2f", leftBackPower, rightBackPower);
-            telemetry.addData("Shooter power ", "%4.2f", shooterPower);
-            telemetry.addData("Reading tags: ", husky.blocks().length);
+            // screen info
+            telemetry.addData("shooter power", "%.2f", shooterPower);
+            telemetry.addData("tags seen", foundTagsCount);
             telemetry.update();
         }
-    }}
+    }
+}
